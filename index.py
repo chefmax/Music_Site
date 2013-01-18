@@ -7,8 +7,8 @@ from os.path import dirname, realpath, sep, pardir , isdir
 from os import listdir 
 for name in listdir(dirname(realpath(__file__))):
     if isdir(name):
-        sys.path.append(realpath(__file__) + sep + name)
-#sys.path.append(dirname(realpath(__file__)) + sep + "src")
+        sys.path.append(realpath(__file__) + sep + str(name))
+sys.path.append(dirname(realpath(__file__)) + sep + "src")
 from Controllers import *
 from Models import *
 from Views import *
@@ -45,7 +45,7 @@ def getresult(req, params):
     if params == None:
         TheView = View.View.getView()
         TitleIsGenerated = TheView.generateTitle()
-        return TheView.getAll(req,None,None)
+        return TheView.getAll(req,None,None,0)
     else:
         TheController = getController(params[1])
         TheView = View.View.getView()
@@ -53,7 +53,7 @@ def getresult(req, params):
         method = getMethod(len(params))    
         string_template = getTemplate(params)
         request = TheController.get(req, method, string_template)
-        return TheView.getAll(req, request, params[1])
+        return TheView.getAll(req, request, params[1], len(params)/2)
         
 
 def index(req):

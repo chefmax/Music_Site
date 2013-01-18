@@ -18,7 +18,7 @@ class AbstractView(object):
       
         
     
-    def get(self, req, parameter ,typeOfLink , header ): pass
+    def get(self, req, parameter ,typeOfLink , header, NumberOfLevels ): pass
     
     
     def getTypeOfSample(self,req,parameter):
@@ -29,17 +29,17 @@ class AbstractView(object):
         else:
             return "albums"
     
-    def getAll(self, req, parameter ,typeOfLink ):
+    def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         toBeInserted = ""
         if parameter == None:
             return self.getresult(toBeInserted)
         DivIsFirst = True
         for i in range(0,len(parameter),2):
             if DivIsFirst == True:
-                toBeInserted += "<div class = \"title\" id = \"t\" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1]) + "</div>" + "\n"
+                toBeInserted += "<div class = \"title\" id = \"t\" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n"
                 DivIsFirst = False
             else:
-                toBeInserted += "<div class = \"title\"  >" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1]) + "</div>" + "\n"    
+                toBeInserted += "<div class = \"title\"  >" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n"    
         return self.getresult(toBeInserted)
     
     def getresult(self,toBeInserted):

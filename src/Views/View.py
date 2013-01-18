@@ -45,7 +45,7 @@ class View(AbstractView):
         return cls.View  
     
     
-    def get(self, req, rows ,typeOfLink , header ): 
+    def get(self, req, rows ,typeOfLink , header, NumberOfLevels ): 
         toBeInserted = ""
         rowsNumber = len(rows)
         if rowsNumber == 0:
@@ -61,13 +61,16 @@ class View(AbstractView):
                 toBeInserted += "    <tr>" + "\n"
                 columnNumber = 1
                 Arguments = ""
+                for i in range(NumberOfLevels):
+                    Arguments += "../"
+                                        
                 for columsIterator in colums:
                     if columnNumber == 1:
                         firstArgument = self.getTypeOfSample(req,header[0])  # band , tracks or albums 
-                        if typeOfLink == "tracks":
+                        if typeOfLink == "tracks" and header[0] == "Track_Name":
                             toBeInserted += "       <td> " + "<a href = \"http://93.175.7.147/download\" >"   + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
                         else:
-                            toBeInserted += "       <td> " + "<a href = \"http://93.175.7.147/"  + firstArgument + "/"  + str(columsIterator).replace("'","")[0] + "/" + str(columsIterator).replace("'","") +  "\"" +">"  + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
+                            toBeInserted += "       <td> " + "<a href = \"" + Arguments  + firstArgument + "/"  + str(columsIterator).replace("'","")[0] + "/" + str(columsIterator).replace("'","") +  "\"" +">"  + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
                         columnNumber = 2
                     else:
                         toBeInserted += "       <td> "  + str(columsIterator).replace("'","") +   " </td>" + "\n"
