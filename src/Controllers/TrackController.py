@@ -5,7 +5,8 @@ Created on 14.01.2013
 '''
 import sys
 from Controllers.Controller import Controller
-sys.path.append("/home/chef/workspace/Music_Site/src")
+from os.path import dirname, realpath, sep, pardir, abspath, join
+sys.path.append(abspath(join(dirname(realpath(__file__)), pardir)))
 import Models
 
 
@@ -28,4 +29,3 @@ class TrackController(Controller):
             return model.getAllByLetter(req,par)
         else:
             return "Error! This method doesn't exist!"
-

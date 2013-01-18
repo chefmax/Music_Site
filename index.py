@@ -3,7 +3,12 @@ import sqlite3
 import time
 import re
 import sys
-sys.path.append("/home/chef/workspace/Music_Site/src")
+from os.path import dirname, realpath, sep, pardir , isdir
+from os import listdir 
+for name in listdir(dirname(realpath(__file__))):
+    if isdir(name):
+        sys.path.append(realpath(__file__) + sep + name)
+#sys.path.append(dirname(realpath(__file__)) + sep + "src")
 from Controllers import *
 from Models import *
 from Views import *
@@ -67,3 +72,5 @@ def index(req):
         result = getresult(req, parameters)
 
     return result
+
+print sys.path        

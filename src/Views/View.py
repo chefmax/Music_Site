@@ -4,7 +4,8 @@ Created on 17.01.2013
 @author: chef
 '''
 import sys
-sys.path.append("/home/chef/workspace/Music_Site/src")
+from os.path import dirname, realpath, sep, pardir
+sys.path.append(dirname(realpath(__file__)))
 import re
 from Views.AbstractView import AbstractView
 import sqlite3
@@ -74,4 +75,3 @@ class View(AbstractView):
                 toBeInserted += "  </tr>" + "\n"    
             toBeInserted += "  </tbody>" + "\n" + "</table>" + "\n"
             return toBeInserted
-        

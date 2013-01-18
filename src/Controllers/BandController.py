@@ -5,7 +5,8 @@ Created on 14.01.2013
 '''
 import sys
 from Controllers.Controller import Controller
-sys.path.append("/home/chef/workspace/Music_Site/src")
+import os.path
+sys.path.append(os.path.realpath(__file__))
 import Models
 
 class BandController(Controller):

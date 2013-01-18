@@ -4,7 +4,8 @@ Created on 14.01.2013
 @author: chef
 '''
 import sys
-sys.path.append("/home/chef/workspace/Music_Site/src")
+from os.path import dirname, realpath, sep, pardir
+sys.path.append(dirname(realpath(__file__)))
 from Models.Model import Model
 
 class BandModel(Model):

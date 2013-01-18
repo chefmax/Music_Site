@@ -5,7 +5,8 @@ Created on 14.01.2013
 '''
 import sys
 from Controllers.Controller import Controller
-sys.path.append("/home/chef/workspace/Music_Site/src")
+from os.path import dirname, realpath, sep, pardir
+sys.path.append(dirname(realpath(__file__)))
 import Models
 
 class AlbumController(Controller):
