@@ -43,7 +43,7 @@ class AbstractView(object):
         return self.getresult(toBeInserted)
     
     def getresult(self,toBeInserted):
-        f = open("/home/chef/workspace/title/title.html","r+")
+        f = open("/home/chef/workspace/Music_Site/src/Views/title.html", "r+")
         result = f.read()
         result = result.replace("****",toBeInserted)
         return result

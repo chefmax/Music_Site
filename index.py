@@ -44,12 +44,12 @@ def getTemplate(parameters):
 def getresult(req, params):  
     if params == None:
         TheView = View.View.getView()
-        TitleIsGenerated = TheView.generateTitle()
+        TitleIsGenerated = TheView.generateTitle(0)
         return TheView.getAll(req,None,None,0)
     else:
         TheController = getController(params[1])
         TheView = View.View.getView()
-        TitleIsGenerated = TheView.generateTitle()
+        TitleIsGenerated = TheView.generateTitle(len(params)/2)
         method = getMethod(len(params))    
         string_template = getTemplate(params)
         request = TheController.get(req, method, string_template)

@@ -11,7 +11,7 @@ from Views.AbstractView import AbstractView
 import sqlite3
 class View(AbstractView):
     
-    def writeLetters (self, connection, cursor, BandOrAlbum,file):
+    def writeLetters (self, connection, cursor, BandOrAlbum,file, Arguments):
         cursor.execute("SELECT distinct substr(Description,1,1) FROM %s group by Description order by Description" % (BandOrAlbum) )
         FirstLetters = []
         for i in cursor:
@@ -20,17 +20,21 @@ class View(AbstractView):
         for i in FirstLetters :
             file.write("<a href=\"http://93.175.7.147/%s/%s\"> %s </a> &nbsp;""" % (BandOrAlbum.lower(),i.lower(),i.lower()))
     
-    def generateTitle(self):
+    def generateTitle(self,NumberOfLevels):
         if self.TitleIsGenerated == False: 
-            title = open("/home/chef/workspace/title/title.html", "r+")
+            Arguments = ""
+            for j in range(NumberOfLevels):
+                Arguments += pardir
+                Arguments += sep
+            title = open("/home/chef/workspace/Music_Site/src/Views/title.html", "r+")
             title.write("<html>" + "\n" + "<head>" + "\n" + "<link type=\"text/css\" rel=\"stylesheet\" href=\"stylesheetcss\"/>" + "</head>" + "\n")
             title.write("<h3> <a href = \"http://93.175.7.147/bands\" >" + "Bands"  + "</a> </h3>" + "\n")
             connection = sqlite3.connect('/home/chef/workspace/www/Band.db')
             cursor = connection.cursor()
-            self.writeLetters(connection,cursor,"Bands",title)
+            self.writeLetters(connection,cursor,"Bands",title,Arguments)
            
             title.write("<h3> <a href = \"http://93.175.7.147/albums\" >" + "Albums"  + "</a> </h3>" + "\n")    
-            self.writeLetters(connection,cursor,"Albums",title)
+            self.writeLetters(connection,cursor,"Albums",title,Arguments)
             title.write("\n " + "<br> ****" + "</html>" + "\n") 
             self.TitleIsGenerated = True   
         return 1  
@@ -62,7 +66,8 @@ class View(AbstractView):
                 columnNumber = 1
                 Arguments = ""
                 for i in range(NumberOfLevels):
-                    Arguments += "../"
+                    Arguments += pardir
+                    Arguments += sep
                                         
                 for columsIterator in colums:
                     if columnNumber == 1:

@@ -1,6 +1,6 @@
 .pydevproject
 *.py[cod]
-
+title.html*
 # C extensions
 *.so
 
