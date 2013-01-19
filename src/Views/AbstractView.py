@@ -21,6 +21,16 @@ class AbstractView(object):
     def get(self, req, parameter ,typeOfLink , header, NumberOfLevels ): pass
     
     
+    def getHeader(self,req,NumberOfLevels,LinkType,Value):
+        if NumberOfLevels == 0 :
+            return "Root"
+        elif NumberOfLevels == 1:
+            return "All " + self.getTypeOfSample(req, LinkType)
+        elif NumberOfLevels == 2:
+            return  "All "+ self.getTypeOfSample(req, LinkType) + " by " + "first letter" 
+        else:
+            return Value
+    
     def getTypeOfSample(self,req,parameter):
         if parameter == "Track_Name":
             return "tracks"
@@ -30,21 +40,28 @@ class AbstractView(object):
             return "albums"
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
-        toBeInserted = "Maxim"
+        toBeInserted = ""
+        title = self.getHeader(req, NumberOfLevels, typeOfLink, typeOfLink)
         if parameter == None:
-            return self.getresult(toBeInserted)
-        DivIsFirst = True
+            return self.getresult("",toBeInserted)
+        DivIsFirst = "id = \"first\" "
+        toBeInserted += "<div class = \"outer\">"
+        toBeInserted += "\n"
         for i in range(0,len(parameter),2):
-            if DivIsFirst == True:
-                toBeInserted += "<div class = \"title\" id = \"t\" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n" + "<br>"
-                DivIsFirst = False
-            else:
-                toBeInserted += "<div class = \"title\"  >" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n" + "<br>"   
-        return self.getresult(toBeInserted)
+                if (i+3) > len(parameter):
+                    toBeInserted += "<div class = \"oneblock\"" +" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n"
+                    DivIsFirst = ""
+                else:
+                    toBeInserted += "<div class = \"title\" "  + DivIsFirst + ">" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n" 
+                    DivIsFirst = ""
+        toBeInserted += "<div class = \"outer\">"
+        toBeInserted += "\n" 
+        return self.getresult(title,"article section h2 number 1",toBeInserted,"****")
     
-    def getresult(self,toBeInserted):
+    def getresult(self,toBeInsertedHead,whatReplaceHead,toBeInserted,whatReplace):
         f = open("/home/chef/workspace/Music_Site/index.html", "r+")
         result = f.read()
-        result = result.replace("****",toBeInserted)
+        result = result.replace(whatReplaceHead,toBeInsertedHead)
+        result = result.replace(whatReplace,toBeInserted)
         return result
     

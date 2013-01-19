@@ -47,6 +47,9 @@ class View(AbstractView):
         if cls.View == None:
             cls.View = View()
         return cls.View  
+
+            
+        
     
     
     def get(self, req, rows ,typeOfLink , header, NumberOfLevels ): 
@@ -67,12 +70,11 @@ class View(AbstractView):
                 Arguments = ""
                 for i in range(NumberOfLevels):
                     Arguments += pardir
-                    Arguments += sep
-                                        
+                    Arguments += sep                       
                 for columsIterator in colums:
                     if columnNumber == 1:
                         firstArgument = self.getTypeOfSample(req,header[0])  # band , tracks or albums 
-                        if typeOfLink == "tracks" and header[0] == "Track_Name":
+                        if typeOfLink == "tracks" and len(header)>1 and header[1] == "Format":
                             toBeInserted += "       <td> " + "<a href = \"../../../download\" >"   + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
                         else:
                             toBeInserted += "       <td> " + "<a href = \"" + Arguments  + firstArgument + "/"  + str(columsIterator).replace("'","")[0] + "/" + str(columsIterator).replace("'","") +  "\"" +">"  + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"

@@ -32,12 +32,23 @@ class TrackModel(Model):
         header = ["Track_Name","Format","Bitrate","Style","Cost"]
         result = []
         result.extend(self.execute(query, header))
-        query = """ select distinct  albums.description from albums,tracks, tracks_album
+        query = """ select distinct  albums.description from albums,tracks, tracks_album,
+                        (select distinct  album_id as id  , count(album_id) as count from  tracks_album
+                         group by album_id ) t1
                     where tracks.description like '%s' and tracks_album.track_id = tracks.id 
-                    and tracks_album.album_id = albums.id
+                    and tracks_album.album_id = albums.id and albums.id and t1.count > 1
                 """ % (par)
-        header = ["Album_Name"]
+        header = ["Miscellanys"]
         result.extend(self.execute(query, header))
+        query = """ select distinct  albums.description from albums,tracks, tracks_album,
+                        (select distinct  album_id as id  , count(album_id) as count from  tracks_album
+                         group by album_id ) t1
+                    where tracks.description like '%s' and tracks_album.track_id = tracks.id 
+                    and tracks_album.album_id = albums.id and albums.id and t1.count = 1
+                """ % (par)
+        header = ["Band's Albums"]
+        result.extend(self.execute(query, header))
+        
         return result
 
     def getAll( self, req , par):
