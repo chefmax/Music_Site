@@ -30,20 +30,20 @@ class AbstractView(object):
             return "albums"
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
-        toBeInserted = ""
+        toBeInserted = "Maxim"
         if parameter == None:
             return self.getresult(toBeInserted)
         DivIsFirst = True
         for i in range(0,len(parameter),2):
             if DivIsFirst == True:
-                toBeInserted += "<div class = \"title\" id = \"t\" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n"
+                toBeInserted += "<div class = \"title\" id = \"t\" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n" + "<br>"
                 DivIsFirst = False
             else:
-                toBeInserted += "<div class = \"title\"  >" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n"    
+                toBeInserted += "<div class = \"title\"  >" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n" + "<br>"   
         return self.getresult(toBeInserted)
     
     def getresult(self,toBeInserted):
-        f = open("/home/chef/workspace/Music_Site/src/Views/title.html", "r+")
+        f = open("/home/chef/workspace/Music_Site/index.html", "r+")
         result = f.read()
         result = result.replace("****",toBeInserted)
         return result
