@@ -73,6 +73,8 @@ def index(req):
         parameters = getParams(req)
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
+            parameters[i] = parameters[i].replace("%21","!")
+            parameters[i] = parameters[i].replace("+"," ")
         result = getresult(req, parameters)
 
     return result

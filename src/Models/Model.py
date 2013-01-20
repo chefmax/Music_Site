@@ -21,6 +21,8 @@ class Model:
         return cls.Model    
     
     def addTitle(self,TitleContent ,result ):
+        if len(result[0]) == 0:
+            TitleContent = "No such"
         Title = [TitleContent]
         result.extend(Title)
         return result

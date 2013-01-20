@@ -43,9 +43,9 @@ class AbstractView(object):
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         toBeInserted = ""
-        title = self.getHeader(parameter)
         if parameter == None:
-            return self.getresult("",toBeInserted)
+            return self.getresult("Root", "article section h2 number 1" ,"","****")
+        title = self.getHeader(parameter)
         DivIsFirst = "id = \"first\" "
         toBeInserted += "<div class = \"outer\">"
         toBeInserted += "\n"
