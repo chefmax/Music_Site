@@ -29,10 +29,27 @@ class AlbumModel(Model):
         return self.addTitle(TitleContent, self.execute(query, header))
 
     def getAll( self, req , par):
-        query ="select distinct  Description from Albums"
+        result = []
+        query = """select distinct  Description from Albums,
+                     (select distinct  album_id as id  , count(album_id) as count from  tracks_album
+                      group by album_id ) t1
+                   where t1.id = Albums.id and t1.count = 1   
+         """
         header = ["Album_Name"]
+        
+        result.extend(self.execute(query, header))
+        
+        query = """select distinct  Description from Albums,
+                     (select distinct  album_id as id  , count(album_id) as count from  tracks_album
+                      group by album_id ) t1
+                   where t1.id = Albums.id and t1.count > 1   
+         """
+        header = ["Miscellanys"]
+        
+        result.extend(self.execute(query, header))
+        
         TitleContent = "All albums:"       
-        return self.addTitle(TitleContent, self.execute(query, header))
+        return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
         query = "select distinct  Description from Albums where description like '%s'" % (par+'%')

@@ -29,7 +29,7 @@ class Model:
     
     def getConnection (self):
         #if self.connection == None:
-        self.connection = sqlite3.connect('/home/chef/workspace/www/Band.db')
+        self.connection = sqlite3.connect(dirname(realpath(__file__)) + "/Band.db")
         return self.connection
     
     def execute (self, query, header):
@@ -49,7 +49,7 @@ class Model:
     def getAllByLetter(self, req , par): pass
 
 
-
+print dirname(realpath(__file__))
 
 
 
