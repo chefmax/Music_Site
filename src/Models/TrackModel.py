@@ -18,33 +18,43 @@ class TrackModel(Model):
         return cls.Model
     
     def get( self, req , par):
-        query = """ select distinct   tracks.description as track,Formats.description as format, bitrate as bitrate,Style.description as style,tracks.cost  
+        result = []
+        
+        query = """select distinct tracks.description, style.description from tracks,style
+                   where tracks.style = style.id and tracks.description like '%s'
+                 """ % (par)
+        header = ["Track_name","Style"]
+        result.extend(self.execute(query, header))
+        
+        query = """ select distinct Formats.description as format, bitrate as bitrate,tracks.cost  
                 from tracks,Track_Format,Formats,Style
                 where tracks.id = Track_Format.track_id and Track_Format.bitrate<128 
                       and Track_Format.format_id = Formats.id and tracks.Style = style.id and tracks.description like '%s'
                 union
-                select distinct   tracks.description as track,Formats.description as format, bitrate as bitrate,Style.description as style,2*tracks.cost   
+                select distinct Formats.description as format, bitrate as bitrate,2*tracks.cost   
                 from tracks,Track_Format,Formats,Style
                 where tracks.id = Track_Format.track_id and Track_Format.bitrate>=128 
                       and Track_Format.format_id = Formats.id and tracks.Style = style.id and tracks.description like '%s'
  
             """ % (par,par)
-        header = ["Track_Name","Format","Bitrate","Style","Cost"]
-        result = []
+        header = ["Format","Bitrate","Cost"]
+        
         result.extend(self.execute(query, header))
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
-                        (select distinct  album_id as id  , count(album_id) as count from  tracks_album
-                         group by album_id ) t1
+                        (select distinct  album_id as id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id ) t1
                     where tracks.description like '%s' and tracks_album.track_id = tracks.id 
-                    and tracks_album.album_id = albums.id and albums.id and t1.count > 1 and t1.id = albums.id 
+                    and tracks_album.album_id = albums.id  and t1.count > 1 and t1.id = albums.id 
                 """ % (par)
         header = ["Miscellanys"]
         result.extend(self.execute(query, header))
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
-                        (select distinct  album_id as id  , count(album_id) as count from  tracks_album
-                         group by album_id ) t1
+                        (select distinct  album_id as id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id  ) t1
                     where tracks.description like '%s' and tracks_album.track_id = tracks.id 
-                    and tracks_album.album_id = albums.id and albums.id and t1.count = 1 and t1.id = albums.id 
+                    and tracks_album.album_id = albums.id  and t1.count = 1 and t1.id = albums.id 
                 """ % (par)
         header = ["Band's Albums"]
         result.extend(self.execute(query, header))
