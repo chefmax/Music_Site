@@ -22,6 +22,12 @@ def getController(kind_of_controller):
         return TrackController.TrackController.getController()
 
 
+def getParams(req):
+        unparsed_parameters = "".join(req.args)
+        template = re.compile("[^?&\/=]+")            
+        return  template.findall(unparsed_parameters)
+    
+
 
 def getMethod(numberOfParameters):
     if numberOfParameters == 2:
@@ -64,9 +70,7 @@ def index(req):
     if str(req.args) == "None":
         result = getresult(req, None)
     else:
-        unparsed_parameters = "".join(req.args)
-        template = re.compile("[^?&\/=]+")            
-        parameters = template.findall(unparsed_parameters)
+        parameters = getParams(req)
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
         result = getresult(req, parameters)

@@ -25,14 +25,17 @@ class AlbumModel(Model):
  
             """ % (par)
         header = ["Track_Name","Owner","Style","Length"]
-        return self.execute(query, header)
+        TitleContent = "Album is \"%s\"" % (par)
+        return self.addTitle(TitleContent, self.execute(query, header))
 
     def getAll( self, req , par):
         query ="select distinct  Description from Albums"
         header = ["Album_Name"]
-        return self.execute(query, header)
+        TitleContent = "All albums:"       
+        return self.addTitle(TitleContent, self.execute(query, header))
 
     def getAllByLetter( self, req , par):
         query = "select distinct  Description from Albums where description like '%s'" % (par+'%')
         header = ["Album_Name"]
-        return self.execute(query, header)
+        TitleContent = "All albums by \"%s\":" % (par) 
+        return self.addTitle(TitleContent, self.execute(query, header))

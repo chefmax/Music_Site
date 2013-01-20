@@ -48,15 +48,16 @@ class TrackModel(Model):
                 """ % (par)
         header = ["Band's Albums"]
         result.extend(self.execute(query, header))
-        
-        return result
+        TitleContent = "Track is \"%s\"" % (par)      
+        return self.addTitle(TitleContent, result)
 
     def getAll( self, req , par):
         query ="""select distinct  Tracks.Description as Name, Style.Description as Style, Tracks.length as Length 
                   from Tracks, Bands, Style
                   where Tracks.band_id = Bands.id and Style.id = Tracks.style"""
         header = ["Track_Name","Style","Length"]
-        return self.execute(query, header)
+        TitleContent = "All tracks:"
+        return self.addTitle(TitleContent, self.execute(query, header))
 
     def getAllByLetter( self, req , par):
         query ="""select distinct  Tracks.Description as Name, Style.Description as Style, Tracks.length as Length 
@@ -64,4 +65,5 @@ class TrackModel(Model):
                   where Tracks.band_id = Bands.id and Style.id = Tracks.style and Tracks.description like '%s'
                """ % (par+'%')
         header = ["Track_Name","Style","Length"]
-        return self.execute(query, header)   
+        TitleContent = "All tracks by \"%s\":" % (par) 
+        return self.addTitle(TitleContent, self.execute(query, header))   

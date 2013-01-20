@@ -34,14 +34,17 @@ class BandModel(Model):
         header = ["Album_Name"]
         result.extend(self.execute(query, header))
         
-        return result
+        TitleContent = "Band is \"%s\"" % (par)
+        return self.addTitle(TitleContent, result)
 
     def getAll(self, req , par):
         query = "select distinct  Description, MembersNumber from Bands"
         header = ["Band_Name","Number of Members"]
-        return self.execute(query, header)
+        TitleContent = "All bands:"        
+        return self.addTitle(TitleContent, self.execute(query, header))
 
     def getAllByLetter(self, req , par):
         query = "select distinct Description, MembersNumber from Bands where description like '%s'" % (par+'%')
         header = ["Band_Name","Number of Members"]
-        return self.execute(query, header)
+        TitleContent = "All bands by \"%s\":" % (par)
+        return self.addTitle(TitleContent, self.execute(query, header))

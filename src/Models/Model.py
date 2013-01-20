@@ -20,6 +20,10 @@ class Model:
             cls.Model = Model()
         return cls.Model    
     
+    def addTitle(self,TitleContent ,result ):
+        Title = [TitleContent]
+        result.extend(Title)
+        return result
     
     def getConnection (self):
         #if self.connection == None:

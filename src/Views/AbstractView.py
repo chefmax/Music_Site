@@ -6,6 +6,7 @@ Created on 15.01.2013
 import sys 
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
+import re
 
 
 class AbstractView(object):
@@ -20,16 +21,17 @@ class AbstractView(object):
     
     def get(self, req, parameter ,typeOfLink , header, NumberOfLevels ): pass
     
+    def getParams(self,req):
+        unparsed_parameters = "".join(req.args)
+        template = re.compile("[^?&\/=]+")            
+        return  template.findall(unparsed_parameters)
     
-    def getHeader(self,req,NumberOfLevels,LinkType,Value):
-        if NumberOfLevels == 0 :
-            return "Root"
-        elif NumberOfLevels == 1:
-            return "All " + self.getTypeOfSample(req, LinkType)
-        elif NumberOfLevels == 2:
-            return  "All "+ self.getTypeOfSample(req, LinkType) + " by " + "first letter" 
-        else:
-            return Value
+    
+    def getHeader(self,result):
+        header = result[len(result)-1]
+        result.pop()
+        return header
+
     
     def getTypeOfSample(self,req,parameter):
         if parameter == "Track_Name":
@@ -41,7 +43,7 @@ class AbstractView(object):
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         toBeInserted = ""
-        title = self.getHeader(req, NumberOfLevels, typeOfLink, typeOfLink)
+        title = self.getHeader(parameter)
         if parameter == None:
             return self.getresult("",toBeInserted)
         DivIsFirst = "id = \"first\" "
