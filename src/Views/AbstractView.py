@@ -96,8 +96,5 @@ class AbstractView(object):
         result = result.replace("Bands*",self.LevelsUp + "bandsbyletter")
         result = result.replace(whatReplaceHead,toBeInsertedHead)
         result = result.replace(whatReplace,toBeInserted)
-        result = result.replace("article section h2 #2","")
-        result = result.replace("article footer h3","")
-        result = result.replace("#####","")
         return result
     

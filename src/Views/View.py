@@ -62,7 +62,7 @@ class View(AbstractView):
                 for columsIterator in colums:
                     if columnNumber == 1:
                         firstArgument = self.getTypeOfSample(req,header[0])  # band , tracks or albums 
-                        if typeOfLink == "tracks" and len(header)>1 and (header[1] == "Style" or header[1] == "Bitrate"):
+                        if typeOfLink == "tracks" and len(header)>1 and header[1] == "Format":
                             toBeInserted += "       <td> " + "<a href = \"../../../download\" >"   + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
                         else:
                             toBeInserted += "       <td> " + "<a href = \"" + Arguments  + firstArgument + "/"  + str(columsIterator).replace("'","")[0] + "/" + str(columsIterator).replace("'","") +  "\"" +">"  + str(columsIterator).replace("'","") +  "</a>"+ "  </td>" + "\n"
