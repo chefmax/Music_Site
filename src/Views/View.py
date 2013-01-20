@@ -38,7 +38,7 @@ class View(AbstractView):
         
     
     
-    def get(self, req, rows ,typeOfLink , header, NumberOfLevels ): 
+    def get(self, req, rows ,typeOfLink , header ): 
         toBeInserted = ""
         rowsNumber = len(rows)
         if rowsNumber == 0:
@@ -56,7 +56,7 @@ class View(AbstractView):
                 toBeInserted += "    <tr>" + "\n"
                 columnNumber = 1
                 Arguments = ""
-                for i in range(NumberOfLevels):
+                for i in range(self.NumberOfLevels):
                     Arguments += pardir
                     Arguments += sep                       
                 for columsIterator in colums:

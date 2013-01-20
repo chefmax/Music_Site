@@ -12,14 +12,15 @@ import re
 class AbstractView(object):
     
     View = None
-    TitleIsGenerated = False
+    NumberOfLevels = 0
+    LevelsUp = ""
     
     @classmethod
     def getView(cls):pass
       
         
     
-    def get(self, req, parameter ,typeOfLink , header, NumberOfLevels ): pass
+    def get(self, req, parameter ,typeOfLink , header): pass
     
     def getParams(self,req):
         unparsed_parameters = "".join(req.args)
@@ -28,18 +29,17 @@ class AbstractView(object):
     
     
         
-    def generateLetters(self,NumberOfLevels,typeOfLink,rows):
-        LevelsUp = ""
+    def generateLetters(self,typeOfLink,rows):
         toBeInserted = ""    
         if typeOfLink == "albumsbyletter":
             BandsOrAlbums = "Albums"
         else:
             BandsOrAlbums = "Bands"
-        for j in range(NumberOfLevels):
-             LevelsUp += pardir
-             LevelsUp += sep
+        for j in range(self.NumberOfLevels):
+             self.LevelsUp += pardir
+             self.LevelsUp += sep
         for i in rows:
-            toBeInserted += "<a href = \""+ LevelsUp + BandsOrAlbums + "/" + str(i)[3:len(str(i))-3].replace("'", "") + "\"" + ">" +str(i)[3:len(str(i))-3].replace("'", "") + "</a>  &nbsp;"     
+            toBeInserted += "<a href = \""+ self.LevelsUp + BandsOrAlbums + "/" + str(i)[3:len(str(i))-3].replace("'", "") + "\"" + ">" +str(i)[3:len(str(i))-3].replace("'", "") + "</a>  &nbsp;"     
         return toBeInserted  
     
     
@@ -60,21 +60,27 @@ class AbstractView(object):
             return "albums"
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
+        self.NumberOfLevels = NumberOfLevels
         toBeInserted = ""
+        
+        for j in range(self.NumberOfLevels):
+             self.LevelsUp += pardir
+             self.LevelsUp += sep
+        
         if parameter == None:
             return self.getresult("Root", "article section h2 number 1" ,"","****")
         title = self.getHeader(parameter)
         if typeOfLink.lower() == "albumsbyletter" or typeOfLink.lower() == "bandsbyletter":
-            return self.getresult(title, "article section h2 number 1", self.generateLetters(NumberOfLevels, typeOfLink, parameter[0]), "****")
+            return self.getresult(title, "article section h2 number 1", self.generateLetters( typeOfLink, parameter[0]), "****")
         DivIsFirst = "id = \"first\" "
         toBeInserted += "<div class = \"outer\">"
         toBeInserted += "\n"
         for i in range(0,len(parameter),2):
                 if (i+3) > len(parameter):
-                    toBeInserted += "<div class = \"oneblock\"" +" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1], NumberOfLevels) + "</div>" + "\n"
+                    toBeInserted += "<div class = \"oneblock\"" +" >" +  "\n" + self.get(req, parameter[i] , typeOfLink, parameter[i+1]) + "</div>" + "\n"
                     DivIsFirst = ""
                 else:
-                    toBeInserted += "<div class = \"title\" "  + DivIsFirst + ">" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1], NumberOfLevels) + "</div>" + "\n" 
+                    toBeInserted += "<div class = \"title\" "  + DivIsFirst + ">" + "\n" + self.get(req, parameter[i] ,typeOfLink , parameter[i+1]) + "</div>" + "\n" 
                     DivIsFirst = ""
         toBeInserted += "<div class = \"outer\">"
         toBeInserted += "\n" 
@@ -83,6 +89,11 @@ class AbstractView(object):
     def getresult(self,toBeInsertedHead,whatReplaceHead,toBeInserted,whatReplace):
         f = open("/home/chef/workspace/Music_Site/index.html", "r+")
         result = f.read()
+        result = result.replace("css/style.css",self.LevelsUp + "Music_Site/css/style.css")
+        result = result.replace("js/libs/modernizr-2.0.6.min.js",self.LevelsUp + "Music_Site/js/libs/modernizr-2.0.6.min.js")
+        result = result.replace("Main*",self.LevelsUp)        
+        result = result.replace("Albums*",self.LevelsUp + "albumsbyletter")
+        result = result.replace("Bands*",self.LevelsUp + "bandsbyletter")
         result = result.replace(whatReplaceHead,toBeInsertedHead)
         result = result.replace(whatReplace,toBeInserted)
         return result
