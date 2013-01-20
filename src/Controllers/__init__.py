@@ -1,1 +1,1 @@
-__all__ = ["AlbumController", "BandController", "TrackController"]
+__all__ = ["AlbumController", "BandController", "TrackController","AlbumsByLetterController","BandsByLetterController"]

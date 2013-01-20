@@ -11,34 +11,20 @@ from Views.AbstractView import AbstractView
 import sqlite3
 class View(AbstractView):
     
-    def writeLetters (self, connection, cursor, BandOrAlbum,file, Arguments):
-        cursor.execute("SELECT distinct substr(Description,1,1) FROM %s group by Description order by Description" % (BandOrAlbum) )
+    def writeLetters (self, connection, cursor, typeOfLink, LevelsUp):
+        if typeOfLink == "albumsbyletter":
+            BandsOrAlbums = "Albums"
+        else:
+            BandsOrAlbums = "Bands"  
+        cursor.execute("SELECT distinct substr(Description,1,1) FROM %s group by Description order by Description" % (BandsOrAlbums) )
         FirstLetters = []
+        result = ""
         for i in cursor:
             resultToString = str(i)
             FirstLetters.append(resultToString[3:len(resultToString)-3])
         for i in FirstLetters :
-            file.write("<a href=\"http://93.175.7.147/%s/%s\"> %s </a> &nbsp;""" % (BandOrAlbum.lower(),i.lower(),i.lower()))
-    
-    def generateTitle(self,NumberOfLevels):
-        if self.TitleIsGenerated == False: 
-            Arguments = ""
-            for j in range(NumberOfLevels):
-                Arguments += pardir
-                Arguments += sep
-            title = open("/home/chef/workspace/Music_Site/src/Views/title.html", "r+")
-            title.write("<html>" + "\n" + "<head>" + "\n" + "<link type=\"text/css\" rel=\"stylesheet\" href=\"stylesheetcss\"/>" + "</head>" + "\n")
-            title.write("<h3> <a href = \"http://93.175.7.147/bands\" >" + "Bands"  + "</a> </h3>" + "\n")
-            connection = sqlite3.connect('/home/chef/workspace/www/Band.db')
-            cursor = connection.cursor()
-            self.writeLetters(connection,cursor,"Bands",title,Arguments)
-           
-            title.write("<h3> <a href = \"http://93.175.7.147/albums\" >" + "Albums"  + "</a> </h3>" + "\n")    
-            self.writeLetters(connection,cursor,"Albums",title,Arguments)
-            title.write("\n " + "<br> ****" + "</html>" + "\n") 
-            self.TitleIsGenerated = True   
-        return 1  
-    
+            result += "<a href=\"" + LevelsUp + BandsOrAlbums + "> " + i +" </a> &nbsp;"
+        return result    
     
     
     
@@ -58,6 +44,8 @@ class View(AbstractView):
         if rowsNumber == 0:
             return ""
         else:
+            if typeOfLink == "albumsbyletter" or typeOfLink == "bandsbyletter":
+                return  self.generateLetters(1, typeOfLink, rows)
             toBeInserted += "<table border = \"1px\">" + "\n" + "  <thead>"  + "\n" + "      <tr>" + "\n"
             for i in range(len(header)):
                 toBeInserted += "          <th>" + str(header[i]) + "</th>"  + "\n"

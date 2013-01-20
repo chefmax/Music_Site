@@ -27,6 +27,24 @@ class AbstractView(object):
         return  template.findall(unparsed_parameters)
     
     
+        
+    def generateLetters(self,NumberOfLevels,typeOfLink,rows):
+        LevelsUp = ""
+        toBeInserted = ""    
+        if typeOfLink == "albumsbyletter":
+            BandsOrAlbums = "Albums"
+        else:
+            BandsOrAlbums = "Bands"
+        for j in range(NumberOfLevels):
+             LevelsUp += pardir
+             LevelsUp += sep
+        for i in rows:
+            toBeInserted += "<a href = \""+ LevelsUp + BandsOrAlbums + "/" + str(i)[3:len(str(i))-3].replace("'", "") + "\"" + ">" +str(i)[3:len(str(i))-3].replace("'", "") + "</a>  &nbsp;"     
+        return toBeInserted  
+    
+    
+    
+    
     def getHeader(self,result):
         header = result[len(result)-1]
         result.pop()
@@ -46,6 +64,8 @@ class AbstractView(object):
         if parameter == None:
             return self.getresult("Root", "article section h2 number 1" ,"","****")
         title = self.getHeader(parameter)
+        if typeOfLink.lower() == "albumsbyletter" or typeOfLink.lower() == "bandsbyletter":
+            return self.getresult(title, "article section h2 number 1", self.generateLetters(NumberOfLevels, typeOfLink, parameter[0]), "****")
         DivIsFirst = "id = \"first\" "
         toBeInserted += "<div class = \"outer\">"
         toBeInserted += "\n"
