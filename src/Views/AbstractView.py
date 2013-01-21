@@ -62,7 +62,7 @@ class AbstractView(object):
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         self.NumberOfLevels = NumberOfLevels
         toBeInserted = ""
-        
+        self.LevelsUp = ""
         for j in range(self.NumberOfLevels):
              self.LevelsUp += pardir
              self.LevelsUp += sep
@@ -89,8 +89,8 @@ class AbstractView(object):
     def getresult(self,toBeInsertedHead,whatReplaceHead,toBeInserted,whatReplace):
         f = open("/home/chef/workspace/Music_Site/index.html", "r+")
         result = f.read()
-        result = result.replace("css/style.css",self.LevelsUp + "Music_Site/css/style.css")
-        result = result.replace("js/libs/modernizr-2.0.6.min.js",self.LevelsUp + "Music_Site/js/libs/modernizr-2.0.6.min.js")
+        result = result.replace("css/style.css",self.LevelsUp + "css/style.css")
+        result = result.replace("js/libs/modernizr-2.0.6.min.js",self.LevelsUp + "js/libs/modernizr-2.0.6.min.js")
         result = result.replace("Main*",self.LevelsUp)        
         result = result.replace("Albums*",self.LevelsUp + "albumsbyletter")
         result = result.replace("Bands*",self.LevelsUp + "bandsbyletter")
