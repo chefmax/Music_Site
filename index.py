@@ -70,8 +70,9 @@ def index(req):
     req.send_http_header()
     result = []
     parameters = []
+    return len(req.args)
     if str(req.args) == "None":
-        return len(req.args)
+        
         result = getresult(req, None)
     else:
         return len(req.args)

@@ -87,7 +87,7 @@ class AbstractView(object):
         return self.getresult(title,"article section h2 number 1",toBeInserted,"****")
     
     def getresult(self,toBeInsertedHead,whatReplaceHead,toBeInserted,whatReplace):
-        f = open("/home/chef/workspace/Music_Site/index.html", "r+")
+        f = open("/home/chef/workspace/Music_Site/layout.html", "r+")
         result = f.read()
         result = result.replace("css/style.css",self.LevelsUp + "css/style.css")
         result = result.replace("js/libs/modernizr-2.0.6.min.js",self.LevelsUp + "js/libs/modernizr-2.0.6.min.js")
