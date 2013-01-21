@@ -77,8 +77,7 @@ def index(req):
             parameters[i] = parameters[i].replace("%20"," ")
             parameters[i] = parameters[i].replace("%21","!")
             parameters[i] = parameters[i].replace("+"," ") 
-        result = getresult(req, parameters)
-    return str(parameters)    
+        result = getresult(req, parameters)  
     return result
 
 print sys.path        
