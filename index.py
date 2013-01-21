@@ -74,6 +74,7 @@ def index(req):
         return len(req.args)
         result = getresult(req, None)
     else:
+        return len(req.args)
         parameters = getParams(req)
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
