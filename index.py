@@ -72,7 +72,6 @@ def index(req):
     if str(req.args) == "None":
         result = getresult(req, None)
     else:
-        return len(req.args)
         parameters = getParams(req)
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
