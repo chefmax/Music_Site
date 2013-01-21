@@ -71,7 +71,7 @@ def index(req):
     result = []
     parameters = []
     if str(req.args) == "None":
-        return str(req.args)
+        return len(req.args)
         result = getresult(req, None)
     else:
         parameters = getParams(req)
