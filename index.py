@@ -54,7 +54,6 @@ def getTemplate(parameters):
 def getresult(req, params):  
     if params == None:
         TheView = View.View.getView()
-        return params
         return TheView.getAll(req,None,None,0)
     else:
         TheController = getController(params[1])
@@ -70,9 +69,7 @@ def index(req):
     req.send_http_header()
     result = []
     parameters = []
-    return len(req.args)
     if str(req.args) == "None":
-        
         result = getresult(req, None)
     else:
         return len(req.args)
