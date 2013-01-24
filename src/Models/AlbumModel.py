@@ -56,7 +56,7 @@ class AlbumModel(Model):
          """
         header = ["Album_Name"]
         
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         
         query = """select distinct  Description from Albums,
                      (select distinct  album_id as id  , count(album_id) as count from  tracks_album
@@ -65,7 +65,7 @@ class AlbumModel(Model):
          """
         header = ["Miscellanys"]
         
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         
         TitleContent = "All albums:"       
         return self.addTitle(TitleContent, result)

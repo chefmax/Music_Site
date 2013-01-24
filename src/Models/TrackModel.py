@@ -24,7 +24,7 @@ class TrackModel(Model):
                    where tracks.style = style.id and tracks.description like '%s'
                  """ % (par)
         header = ["Track_name","Style"]
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         
         query = """ select distinct Formats.description as format, bitrate as bitrate,tracks.cost  
                 from tracks,Track_Format,Formats,Style
@@ -39,7 +39,7 @@ class TrackModel(Model):
             """ % (par,par)
         header = ["Format","Bitrate","Cost"]
         
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
                         (select distinct  album_id as id  , count(bands.id) as count from  tracks_album,bands,tracks
                          where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
@@ -48,7 +48,7 @@ class TrackModel(Model):
                     and tracks_album.album_id = albums.id  and t1.count > 1 and t1.id = albums.id 
                 """ % (par)
         header = ["Miscellanys"]
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
                         (select distinct  album_id as id  , count(bands.id) as count from  tracks_album,bands,tracks
                          where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
@@ -57,7 +57,7 @@ class TrackModel(Model):
                     and tracks_album.album_id = albums.id  and t1.count = 1 and t1.id = albums.id 
                 """ % (par)
         header = ["Band's Albums"]
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         TitleContent = "Track is \"%s\"" % (par)      
         return self.addTitle(TitleContent, result)
 

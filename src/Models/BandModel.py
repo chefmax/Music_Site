@@ -32,7 +32,7 @@ class BandModel(Model):
                          and tracks.id = tracks_album.track_id and tracks_album.album_id = albums.id
                 """ % (par)
         header = ["Album_Name"]
-        result.extend(self.execute(query, header))
+        result.append(self.execute(query, header))
         
         TitleContent = "Band is \"%s\"" % (par)
         return self.addTitle(TitleContent, result)

@@ -24,7 +24,7 @@ class Model:
         if len(result[0]) == 0:
             TitleContent = "No such"
         Title = [TitleContent]
-        result.extend(Title)
+        result.append(Title)
         return result
     
     def getConnection (self):
@@ -32,12 +32,23 @@ class Model:
         self.connection = sqlite3.connect(dirname(realpath(__file__)) + "/Band.db")
         return self.connection
     
+    def getResult(self, request):
+        buffer = request.fetchall()
+        table = []
+        row = []
+        for i in buffer:
+            for j in i:
+                row.append(str(j))
+            table.append(row)
+            row = []
+        return table    
+    
     def execute (self, query, header):
         result = []
         connection = self.getConnection()
         cursor = connection.cursor()
         request = cursor.execute(query)
-        result.append(request.fetchall())
+        result.append(self.getResult(request))
         result.append(header)
         return result
     
