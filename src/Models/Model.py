@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 '''
 Created on 14.01.2013
 
@@ -7,6 +8,8 @@ import sys
 import sqlite3
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
+import re
+from mod_python import apache
 
 class Model:
     
@@ -19,6 +22,12 @@ class Model:
         if cls.Model == None:
             cls.Model = Model()
         return cls.Model    
+    
+    def getLevel(self,req):
+        unparsed_parameters = "".join(req.args)
+        template = re.compile("[^?&\/=]+")            
+        return  len(template.findall(unparsed_parameters))/2
+    
     
     def addTitle(self,TitleContent ,result ):
         if len(result[0]) == 0:
@@ -43,13 +52,15 @@ class Model:
             row = []
         return table    
     
-    def execute (self, query, header):
+    def execute (self, query, header, kind , hrefs):
         result = []
         connection = self.getConnection()
         cursor = connection.cursor()
         request = cursor.execute(query)
         result.append(self.getResult(request))
         result.append(header)
+        result.append(hrefs) 
+        result.append(kind)   
         return result
     
 

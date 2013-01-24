@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 '''
 Created on 14.01.2013
 
@@ -19,10 +20,11 @@ class AlbumModel(Model):
         return cls.Model
     
     def get( self, req , par):
-        header = ["Track_Name","Owner","Style","Length"]
-        TitleContent = "Album \"%s\" is Miscellany" %(par)
-        
-            
+        header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
+        TitleContent = u"Альбом \"%s\" является сборником." %(par)
+        kind = ["tracks","bands",None,None]
+        result = []
+        hrefs = [0,0,-4,-4]    
         query = """select distinct bands.description from bands, tracks, tracks_album, albums,
                         (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
                          where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
@@ -32,11 +34,11 @@ class AlbumModel(Model):
                           and t1.album_id = albums.id and t1.count = 1
          """ % (par)
          
-        isMisc = self.execute(query, [])
+        isMisc = self.execute(query, [], req, hrefs)
         if len(isMisc[0]) > 0:
             template = re.compile("'.+'")
             bands = template.findall(str(isMisc[0]))
-            TitleContent = "Album \"" + par + "\" belongs to " + bands[0].replace("'","\"")   
+            TitleContent = u"Альбом \"" + par + "\" принадлежит " + bands[0].replace("'","\"")   
             
         query = """select distinct tracks.description as track, Bands.description as owner,  Style.description as style , tracks.length as length 
                    from tracks, Style, Bands, Albums, tracks_album
@@ -45,33 +47,40 @@ class AlbumModel(Model):
  
                 """ % (par)          
         #TitleContent = "Album is \"%s\"" % (par)
-        return self.addTitle(TitleContent, self.execute(query, header))
+        result.append(self.execute(query, header,kind,hrefs))
+        return self.addTitle(TitleContent, result)
 
     def getAll( self, req , par):
         result = []
+        hrefs = [0]
+        kind = ["albums"]
         query = """select distinct  Description from Albums,
                      (select distinct  album_id as id  , count(album_id) as count from  tracks_album
                       group by album_id ) t1
                    where t1.id = Albums.id and t1.count = 1   
          """
-        header = ["Album_Name"]
+        header = [u"Альбомы"]
         
-        result.append(self.execute(query, header))
+        result.append(self.execute(query, header,kind,hrefs))
         
         query = """select distinct  Description from Albums,
                      (select distinct  album_id as id  , count(album_id) as count from  tracks_album
                       group by album_id ) t1
                    where t1.id = Albums.id and t1.count > 1   
          """
-        header = ["Miscellanys"]
+        header = [u"Сборники"]
         
-        result.append(self.execute(query, header))
+        result.append(self.execute(query, header,kind,hrefs))
         
-        TitleContent = "All albums:"       
+        TitleContent = u"Все альбомы:"       
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
+        kind = ["albums"]
+        result = []
+        hrefs = [0]
         query = "select distinct  Description from Albums where description like '%s'" % (par+'%')
-        header = ["Album_Name"]
-        TitleContent = "All albums by \"%s\":" % (par) 
-        return self.addTitle(TitleContent, self.execute(query, header))
+        header = [u"Альбомы"]
+        TitleContent = u"Альбомы на букву \"%s\":" % (par) 
+        result.append(self.execute(query, header,kind,hrefs))
+        return self.addTitle(TitleContent, result)

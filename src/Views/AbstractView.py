@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 '''
 Created on 15.01.2013
 
@@ -8,6 +9,8 @@ from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
 import re
 from jinja2 import Template
+from jinja2 import FileSystemLoader
+from jinja2.environment import Environment
 
 class AbstractView(object):
     
@@ -61,15 +64,16 @@ class AbstractView(object):
     
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         self.NumberOfLevels = NumberOfLevels
-        toBeInserted = ""
         self.LevelsUp = ""
-        for j in range(self.NumberOfLevels):
-             self.LevelsUp += pardir
-             self.LevelsUp += sep
-        template_file = open("template/tables", "r+")
-        pattern = template_file.read()
-        template = Template(pattern)
-        head = str(parameter[len(parameter)-1])
-        parameter.pop()
-        return template.render(tables = parameter, title = head)
-      
+        env = Environment()
+        env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
+        
+        layout = env.get_template("layout")
+        tables = env.get_template("tables")
+        
+        if (parameter != None):
+            head = parameter[len(parameter)-1][0]
+            parameter.pop()
+        else:
+            head = "Root"    
+        return layout.render(content = tables.render(tables = parameter,  Levels = NumberOfLevels),title = head,Levels = NumberOfLevels ) 

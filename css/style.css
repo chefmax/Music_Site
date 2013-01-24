@@ -1,6 +1,8 @@
 /* HTML5 ✰ Boilerplate
  * ==|== normalize ==========================================================
  */
+
+
 section {
 	float: both;
 	clear: both;
@@ -15,7 +17,7 @@ section {
 
 #first { padding: 15px;}
 
-
+thead {font-family: Arial; }
 .oneblock {	
 	float: both;
 	padding: 15px;
