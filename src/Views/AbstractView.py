@@ -32,19 +32,6 @@ class AbstractView(object):
     
     
         
-    def generateLetters(self,typeOfLink,rows):
-        toBeInserted = ""    
-        if typeOfLink == "albumsbyletter":
-            BandsOrAlbums = "Albums"
-        else:
-            BandsOrAlbums = "Bands"
-        for j in range(self.NumberOfLevels):
-             self.LevelsUp += pardir
-             self.LevelsUp += sep
-        for i in rows:
-            toBeInserted += "<a href = \""+ self.LevelsUp + BandsOrAlbums + "/" + str(i)[3:len(str(i))-3].replace("'", "") + "\"" + ">" +str(i)[3:len(str(i))-3].replace("'", "") + "</a>  &nbsp;"     
-        return toBeInserted  
-    
     
     
     
@@ -53,15 +40,7 @@ class AbstractView(object):
         result.pop()
         return header
 
-    
-    def getTypeOfSample(self,req,parameter):
-        if parameter == "Track_Name":
-            return "tracks"
-        elif parameter == "Band_Name":
-            return "bands"
-        else:
-            return "albums"
-    
+
     def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
         self.NumberOfLevels = NumberOfLevels
         self.LevelsUp = ""
@@ -70,10 +49,17 @@ class AbstractView(object):
         
         layout = env.get_template("layout")
         tables = env.get_template("tables")
-        
+        letters = env.get_template("letters")
         if (parameter != None):
             head = parameter[len(parameter)-1][0]
             parameter.pop()
+            chars = parameter[len(parameter)-1]
+            parameter.pop()
+            lettersToInsert = letters.render(Levels = NumberOfLevels, row = chars)
         else:
-            head = "Root"    
-        return layout.render(content = tables.render(tables = parameter,  Levels = NumberOfLevels),title = head,Levels = NumberOfLevels ) 
+            head = "Root" 
+            lettersToInsert = ""
+         
+        return layout.render(lettersContent = lettersToInsert,
+                             content = tables.render(tables = parameter,  Levels = NumberOfLevels),
+                             title = head,Levels = NumberOfLevels ) 

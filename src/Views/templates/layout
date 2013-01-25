@@ -26,9 +26,9 @@
 			<h1 id="title">Max Music Site!</h1>
 			<nav>
 				<ul>
-					<li><a href="Main*">Главная</a></li>
-					<li><a href="Bands*">Исполнители</a></li>
-					<li><a href="Albums*">Алббомы</a></li>
+					<li><a href="{{links[Levels]}}">Главная</a></li>
+					<li><a href="{{links[Levels]}}bands/">Исполнители</a></li>
+					<li><a href="{{links[Levels]}}albums/">Альбомы</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -43,6 +43,7 @@
 				</header>					
 				<section>
 					<h2> {{title}} </h2>
+					<p>{{lettersContent}}</p>
 					 {{content}} 
 				</section>
 <br><br>

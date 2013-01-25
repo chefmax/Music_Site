@@ -52,6 +52,24 @@ class Model:
             row = []
         return table    
     
+    
+    
+    def executeLetters (self, query, header, kind , hrefs):
+        result = []
+        connection = self.getConnection()
+        cursor = connection.cursor()
+        request = cursor.execute(query)
+        row = []
+        for i in request:
+            for j in i:
+                row.append(str(j))
+        result.append(row)
+        result.append(header)
+        result.append(hrefs) 
+        result.append(kind)   
+        return result
+    
+    
     def execute (self, query, header, kind , hrefs):
         result = []
         connection = self.getConnection()

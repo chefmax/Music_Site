@@ -19,6 +19,15 @@ class AlbumModel(Model):
             cls.Model = AlbumModel()
         return cls.Model
     
+        
+    def getLetters( self, req ):
+        query = "SELECT distinct substr(Description,1,1) FROM Albums group by Description order by Description"
+        header = [""]
+        kind = ["albums"]
+        hrefs = [0]
+        return (self.executeLetters(query, header,kind,hrefs))
+    
+    
     def get( self, req , par):
         header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
         TitleContent = u"Альбом \"%s\" является сборником." %(par)
@@ -38,7 +47,7 @@ class AlbumModel(Model):
         if len(isMisc[0]) > 0:
             template = re.compile("'.+'")
             bands = template.findall(str(isMisc[0]))
-            TitleContent = u"Альбом \"" + par + "\" принадлежит " + bands[0].replace("'","\"")   
+            TitleContent = u"Альбом \"" + par + u"\" принадлежит " + bands[0].replace("'","\"")   
             
         query = """select distinct tracks.description as track, Bands.description as owner,  Style.description as style , tracks.length as length 
                    from tracks, Style, Bands, Albums, tracks_album
@@ -48,6 +57,7 @@ class AlbumModel(Model):
                 """ % (par)          
         #TitleContent = "Album is \"%s\"" % (par)
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)
 
     def getAll( self, req , par):
@@ -72,7 +82,8 @@ class AlbumModel(Model):
         
         result.append(self.execute(query, header,kind,hrefs))
         
-        TitleContent = u"Все альбомы:"       
+        TitleContent = u"Все альбомы:"   
+        result.append(self.getLetters(req))    
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
@@ -83,4 +94,5 @@ class AlbumModel(Model):
         header = [u"Альбомы"]
         TitleContent = u"Альбомы на букву \"%s\":" % (par) 
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)

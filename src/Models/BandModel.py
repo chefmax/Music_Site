@@ -17,6 +17,15 @@ class BandModel(Model):
             cls.Model = BandModel()
         return cls.Model
     
+    
+    def getLetters( self, req ):
+        query = "SELECT distinct substr(Description,1,1) FROM Bands group by Description order by Description"
+        header = [""]
+        kind = ["bands"]
+        hrefs = [0]
+        return (self.executeLetters(query, header,kind,hrefs))
+    
+    
     def get( self, req , par):
         result = []
         hrefs = [0,-4,-4] 
@@ -40,6 +49,7 @@ class BandModel(Model):
         result.append(self.execute(query, header,kind,hrefs))
         
         TitleContent = u"Группа \"%s\"" % (par)
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)
 
     def getAll(self, req , par):
@@ -50,6 +60,7 @@ class BandModel(Model):
         header = [u"Название группы",u"Число участников"]
         TitleContent = u"Группы:"        
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter(self, req , par):
@@ -60,4 +71,5 @@ class BandModel(Model):
         header = [u"Название группы",u"Число участников"]
         TitleContent = u"Группы на букву \"%s\":" % (par)
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)

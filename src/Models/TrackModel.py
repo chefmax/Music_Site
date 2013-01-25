@@ -18,6 +18,15 @@ class TrackModel(Model):
             cls.Model = TrackModel()
         return cls.Model
     
+    
+    def getLetters( self, req ):
+        query = "SELECT distinct substr(Description,1,1) FROM Tracks group by Description order by Description"
+        header = [""]
+        kind = ["tracks"]
+        hrefs = [0]
+        return (self.executeLetters(query, header,kind,hrefs))
+    
+    
     def get( self, req , par):
         result = []
         hrefs = [0,-4,-4]
@@ -62,7 +71,8 @@ class TrackModel(Model):
                 """ % (par)
         header = [u"Альбомы"]
         result.append(self.execute(query, header,kind,hrefs))
-        TitleContent = u"Песня \"%s\"" % (par)      
+        TitleContent = u"Песня \"%s\"" % (par)    
+        result.append(self.getLetters(req))  
         return self.addTitle(TitleContent, result)
 
     def getAll( self, req , par):
@@ -75,6 +85,7 @@ class TrackModel(Model):
         header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
         TitleContent = u"Все песни:"
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
@@ -88,4 +99,5 @@ class TrackModel(Model):
         header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
         TitleContent = u"Все песни на букву \"%s\":" % (par) 
         result.append(self.execute(query, header,kind,hrefs))
+        result.append(self.getLetters(req))        
         return self.addTitle(TitleContent, result)
