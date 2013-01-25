@@ -61,9 +61,9 @@
 				<h3>Поиск</h3>
 				<form>
 					Что ищем: <SELECT NAME="kind" SIZE=1 >
-						<OPTION value = "tracks"> Песни </option>
-						<OPTION value = "albums" > Альбомы </option>
-						<OPTION value = "bands" > Исполнители	</option>
+						<OPTION value = "tracks">Песни </option>
+						<OPTION value = "albums"> Альбомы </option>
+						<OPTION value = "bands"> Исполнители	</option>
 					</SELECT>
 					<br> <br><b>
 					Название: <INPUT NAME= "fl" SIZE= "20" MAXLENGTH= "20"> <BR>	

@@ -1,1 +1,1 @@
-__all__ = ["AbstractView", "View","BandView"]
+__all__ = ["AbstractView"]
