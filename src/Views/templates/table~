@@ -1,0 +1,15 @@
+{% extends "tables" %}
+{% block table %}
+<table>
+	<thead>
+		<tr>
+		{% for table in header %}
+			<th> {{i}} </th>
+		{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>	
+</table>	
+	
+{% endblock %}

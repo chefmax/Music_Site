@@ -1,0 +1,84 @@
+{% set links = { 0:"", 1:"../", 2:"../../", 3:"../../../"} %}
+
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="stylesheet" href="{{links[Levels]}}css/style.css">
+
+	<script src="{{links[Levels]}}js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+<body>
+
+	<div id="header-container">
+		<header class="wrapper clearfix">
+			<h1 id="title">Max Music Site!</h1>
+			<nav>
+				<ul>
+					<li><a href="Main*">Main</a></li>
+					<li><a href="Bands*">Bands</a></li>
+					<li><a href="Albums*">Albums</a></li>
+				</ul>
+			</nav>
+		</header>
+	</div>
+	<div id="main-container">
+		<div id="main" class="wrapper clearfix">
+			
+			<article>
+				<header>
+					<h1>Welcome to Max's music site!</h1>
+					<p> This site was created to learn python and some web. </p>
+				</header>					
+				<section>
+					<h2> {{title}} </h2>
+					 {{content}} 
+				</section>
+<br><br>
+				<section>
+					<h2></h2>
+					<p></p>
+				</section>
+				<footer>
+					<h3></h3>
+					<p></p>
+				</footer>
+			</article>
+			
+			<aside>
+				<h3>Поиск</h3>
+				<form>
+					What we search for: <SELECT NAME="kind" SIZE=1 >
+						<OPTION> tracks
+						<OPTION> albums
+						<OPTION> bands
+					</SELECT>
+					<br> <br><b>
+					Name: <INPUT NAME= "descr" SIZE= "20" MAXLENGTH= "20"> <BR>	
+					<p><input type="submit"></p>
+
+				</form>	
+			</aside>
+			
+		</div> <!-- #main -->
+	</div> <!-- #main-container -->
+
+	<div id="footer-container">
+		<footer class="wrapper">
+			<h3>footer</h3>
+		</footer>
+	</div>
+
+</body>
+</html>

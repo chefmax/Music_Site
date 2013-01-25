@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 from mod_python import apache
 import sqlite3
 import time
@@ -33,16 +34,16 @@ def getParams(req):
     
 
 
-def getMethod(numberOfParameters):
+def getMethod(numberOfParameters,parameters):
     if numberOfParameters == 2:
         return "getAll"
-    elif numberOfParameters == 4:
+    elif numberOfParameters == 4 or (numberOfParameters == 6 and parameters[4] == "num" ):
         return "getAllByLetter"
     else:
         return "get"
 
 def getTemplate(parameters):
-    method = getMethod(len(parameters))
+    method = getMethod(len(parameters),parameters)
     if method == "get":
         return parameters[5]
     elif method == "getAllByLetter":
@@ -51,6 +52,12 @@ def getTemplate(parameters):
         return None
 
 
+def getLevel(params):
+    if params[len(params)-2] == "num":
+        return int(params[len(params)-1])
+    else:
+        return len(params)/2
+
 def getresult(req, params):  
     if params == None:
         TheView = View.View.getView()
@@ -58,10 +65,10 @@ def getresult(req, params):
     else:
         TheController = getController(params[1])
         TheView = View.View.getView()
-        method = getMethod(len(params))    
+        method = getMethod(len(params),params)    
         string_template = getTemplate(params)
         request = TheController.get(req, method, string_template)
-        return TheView.getAll(req, request, params[1].lower(), len(params)/2)
+        return TheView.getAll(req, request, params[1].lower(), getLevel(params))
         
 
 def index(req):
@@ -76,8 +83,8 @@ def index(req):
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
             parameters[i] = parameters[i].replace("%21","!")
-            parameters[i] = parameters[i].replace("+"," ")
-        result = getresult(req, parameters)
+            parameters[i] = parameters[i].replace("+"," ") 
+        result = getresult(req, parameters)      
     return result
 
 print sys.path        

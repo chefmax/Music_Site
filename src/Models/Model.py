@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 '''
 Created on 14.01.2013
 
@@ -7,6 +8,8 @@ import sys
 import sqlite3
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
+import re
+from mod_python import apache
 
 class Model:
     
@@ -20,11 +23,17 @@ class Model:
             cls.Model = Model()
         return cls.Model    
     
+    def getLevel(self,req):
+        unparsed_parameters = "".join(req.args)
+        template = re.compile("[^?&\/=]+")            
+        return  len(template.findall(unparsed_parameters))/2
+    
+    
     def addTitle(self,TitleContent ,result ):
         if len(result[0]) == 0:
             TitleContent = "No such"
         Title = [TitleContent]
-        result.extend(Title)
+        result.append(Title)
         return result
     
     def getConnection (self):
@@ -32,13 +41,44 @@ class Model:
         self.connection = sqlite3.connect(dirname(realpath(__file__)) + "/Band.db")
         return self.connection
     
-    def execute (self, query, header):
+    def getResult(self, request):
+        buffer = request.fetchall()
+        table = []
+        row = []
+        for i in buffer:
+            for j in i:
+                row.append(str(j))
+            table.append(row)
+            row = []
+        return table    
+    
+    
+    
+    def executeLetters (self, query, header, kind , hrefs):
         result = []
         connection = self.getConnection()
         cursor = connection.cursor()
         request = cursor.execute(query)
-        result.append(request.fetchall())
+        row = []
+        for i in request:
+            for j in i:
+                row.append(str(j))
+        result.append(row)
         result.append(header)
+        result.append(hrefs) 
+        result.append(kind)   
+        return result
+    
+    
+    def execute (self, query, header, kind , hrefs):
+        result = []
+        connection = self.getConnection()
+        cursor = connection.cursor()
+        request = cursor.execute(query)
+        result.append(self.getResult(request))
+        result.append(header)
+        result.append(hrefs) 
+        result.append(kind)   
         return result
     
 
