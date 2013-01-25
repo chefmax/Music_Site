@@ -15,9 +15,9 @@
 
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 
-	<link rel="stylesheet" href="{{links[Levels]}}css/style.css">
+	<link rel="stylesheet" href="{{root_path}}css/style.css">
 
-	<script src="{{links[Levels]}}js/libs/modernizr-2.0.6.min.js"></script>
+	<script src="{{root_path}}js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 <body>
 
@@ -26,9 +26,9 @@
 			<h1 id="title">Max Music Site!</h1>
 			<nav>
 				<ul>
-					<li><a href="{{links[Levels]}}">Главная</a></li>
-					<li><a href="{{links[Levels]}}bands/">Исполнители</a></li>
-					<li><a href="{{links[Levels]}}albums/">Альбомы</a></li>
+					<li><a href="{{root_path}}">Главная</a></li>
+					<li><a href="{{root_path}}bands/">Исполнители</a></li>
+					<li><a href="{{root_path}}albums/">Альбомы</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -61,9 +61,9 @@
 				<h3>Поиск</h3>
 				<form>
 					Что ищем: <SELECT NAME="kind" SIZE=1 >
-						<OPTION value = "tracks">Песни </option>
-						<OPTION value = "albums"> Альбомы </option>
-						<OPTION value = "bands"> Исполнители	</option>
+						<OPTION value = "tracks" {% if kind =="tracks" %} selected {% endif %} >Песни </option>
+						<OPTION value = "albums" {% if kind =="albums" %} selected {% endif %}> Альбомы </option>
+						<OPTION value = "bands" {% if kind =="bands" %} selected {% endif %}> Исполнители</option>
 					</SELECT>
 					<br> <br><b>
 					Название: <INPUT NAME= "fl" SIZE= "20" MAXLENGTH= "20"> <BR>	

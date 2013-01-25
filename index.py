@@ -58,17 +58,17 @@ def getLevel(params):
     else:
         return len(params)/2
 
-def getresult(req, params):  
+def getresult(req, params,root_url):  
     if params == None:
-        TheView = View.View.getView()
-        return TheView.getAll(req,None,None,0)
+        TheView = View.View()
+        return TheView.getAll(req,None,None,root_url,None)
     else:
         TheController = getController(params[1])
-        TheView = View.View.getView()
+        TheView = View.View()
         method = getMethod(len(params),params)    
         string_template = getTemplate(params)
         request = TheController.get(req, method, string_template)
-        return TheView.getAll(req, request, params[1].lower(), getLevel(params))
+        return TheView.getAll(req, request, params[1].lower(),root_url,params[1])
         
 
 def index(req):
@@ -76,15 +76,15 @@ def index(req):
     req.send_http_header()
     result = []
     parameters = []
+    root_url = "http://" + str(req.hostname + req.uri).replace("index.py", "")
     if str(req.args) == "None":
-        result = getresult(req, None)
+        result = getresult(req, None,root_url)
     else:
         parameters = getParams(req)
         for i in range(len(parameters)):
             parameters[i] = parameters[i].replace("%20"," ")
             parameters[i] = parameters[i].replace("%21","!")
             parameters[i] = parameters[i].replace("+"," ") 
-        result = getresult(req, parameters)      
+        result = getresult(req, parameters,root_url)      
     return result
-
-print sys.path        
+ 

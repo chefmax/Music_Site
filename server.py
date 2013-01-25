@@ -15,7 +15,7 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		self.send_header("Content-type", "text/html")
 		self.send_header("Content-length", len(text))
 		self.end_headers()
-		self.wfile.write(text)
+		self.wfile.write(self.responses)
 
 
 if sys.argv[1:]:

@@ -1,0 +1,16 @@
+RewriteEngine On
+RewriteCond %{QUERY_STRING} kind=([^&]+)&fl=(.*)
+RewriteRule ^([^/]+)/$ index.py?kind=%1&fl=%2&num=1 [L]
+RewriteCond %{QUERY_STRING} kind=([^&]+)&fl=(.*)
+RewriteRule ^([^/]+)/(\w)/$ index.py?kind=%1&fl=%2&num=2 [L]
+RewriteCond %{QUERY_STRING} kind=([^&]+)&fl=(.*)
+RewriteRule ^([^/]+)/(\w)/([^/]+)/$ index.py?kind=%1&fl=%2&num=3 [L]
+
+RewriteCond %{QUERY_STRING} kind=([^&]+)&fl=(.*)
+RewriteRule ^$ index.py?kind=%1&fl=%2&num=0 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ /Music_Site/$1/ [R=301,L] 
+RewriteRule ^([^/]+)/$ index.py?kind=$1 [L]
+RewriteRule ^([^/]+)/(\w)/$ index.py?kind=$1&fl=$2 [L]
+RewriteRule ^([^/]+)/(\w)/([^/]+)/$ index.py?kind=$1&fl=$2&descr=$3 [L]

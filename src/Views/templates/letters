@@ -1,0 +1,8 @@
+{% set letters = row[0] %}
+{% set header = row[1][0] %}
+{% set hrefs = row[2][0] %}
+{% set kind = row[3][0] %}
+
+{% for i in letters %}
+	<a href = "{{root_path}}{{kind}}/{{i}}"> {{i}} </a> &nbsp;
+{% endfor %}
