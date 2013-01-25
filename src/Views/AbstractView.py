@@ -29,10 +29,7 @@ class AbstractView(object):
         unparsed_parameters = "".join(req.args)
         template = re.compile("[^?&\/=]+")            
         return  template.findall(unparsed_parameters)
-    
-    
-        
-    
+      
     
     
     def getHeader(self,result):
