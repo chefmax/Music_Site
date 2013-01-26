@@ -105,18 +105,17 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     parameters[i] = parameters[i].replace("%20",u" ")
                     parameters[i] = parameters[i].replace("%21",u"!")
                     parameters[i] = parameters[i].replace("+",u" ") 
-                if parameters[0] == "css":
-                    self.typeContent = "text/css"
-                    file = open("css/style.css","r+")
-                    result = file.readlines()   
-                    file.close()
-                    return result
-                elif parameters[0] == "js":
-                    self.typeContent = "text/javascript"
-                    script = parameters[len(parameters)-1]
-                    file = open("js/libs/" + script,"r+")
-                    result = file.readlines()   
-                    file.close()
+                if parameters[0] == "css" or parameters[0] == "js" :
+                    if parameters[0] == "css":
+                        self.typeContent = "text/css"
+                        path = "css/"
+                    else:
+                        self.typeContent = "text/javascript"
+                        path = "js/libs/"
+                    file = parameters[len(parameters)-1]    
+                    source = open(path + file,"r+")
+                    result = source.readlines()   
+                    source.close()
                     return result
                 else:
                     return self.getresult(parameters,self.getRootUrl()) 
@@ -125,7 +124,6 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         
         
         def do_GET(self):
-           text = "dsfasdfasdf"
            self.send_response(200)
            root_url = self.getRootUrl()
            
