@@ -19,6 +19,7 @@
 
 	<script src="{{root_path}}js/libs/modernizr-2.0.6.min.js"></script>
 	<script src="{{root_path}}js/libs/tablesort.js"></script>
+	<script src="{{root_path}}js/libs/hide_search.js"></script>
 </head>
 <body>
 	<div id =  "maket">
@@ -58,10 +59,10 @@
 				</footer>
 			</article>
 			
-			<aside>
-				<h3>Поиск</h3>
-				<form>
-					Что ищем: <SELECT NAME="kind" SIZE=1 >
+			<aside id = "catalog"  >
+				<h3 onclick="change('head')"> Поиск</h3>
+				<form id = "head" style="display:none">
+					Что ищем: <SELECT NAME="kind" SIZE=1  >
 						<OPTION value = "tracks" {% if kind =="tracks" %} selected {% endif %} >Песни </option>
 						<OPTION value = "albums" {% if kind =="albums" %} selected {% endif %}> Альбомы </option>
 						<OPTION value = "bands" {% if kind =="bands" %} selected {% endif %}> Группы</option>
