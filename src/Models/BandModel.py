@@ -21,7 +21,7 @@ class BandModel(Model):
     def getLetters( self, req ):
         query = "SELECT distinct substr(Description,1,1) FROM Bands group by Description order by Description"
         header = [""]
-        kind = ["bands"]
+        kind = [u"bands"]
         hrefs = [0]
         return (self.executeLetters(query, header,kind,hrefs))
     
@@ -29,7 +29,7 @@ class BandModel(Model):
     def get( self, req , par):
         result = []
         hrefs = [0,-4,-4] 
-        kind = ["tracks",None,None]
+        kind = [u"tracks",None,None]
         query = """select distinct tracks.description as track, Style.description as style , tracks.length as length 
                    from tracks, Style, Bands
                    where tracks.Style = style.id and Bands.id = Tracks.band_id and bands.description like '%s'
@@ -39,7 +39,7 @@ class BandModel(Model):
         result.append(self.execute(query, header,kind,hrefs))
         
         hrefs = [0]
-        kind = ["albums"]
+        kind = [u"albums"]
         query = """select distinct Albums.description  
                    from tracks, Albums, Bands, tracks_album 
                    where Bands.id = Tracks.band_id and bands.description like '%s' 
@@ -66,7 +66,7 @@ class BandModel(Model):
     def getAllByLetter(self, req , par):
         result = []
         hrefs = [0,-4]
-        kind = ["bands",None]
+        kind = [u"bands",None]
         query = "select distinct Description, MembersNumber from Bands where description like '%s'" % (par+'%')
         header = [u"Название группы",u"Число участников"]
         TitleContent = u"Группы на букву \"%s\":" % (par)

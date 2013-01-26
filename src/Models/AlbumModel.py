@@ -23,7 +23,7 @@ class AlbumModel(Model):
     def getLetters( self, req ):
         query = "SELECT distinct substr(Description,1,1) FROM Albums group by Description order by Description"
         header = [""]
-        kind = ["albums"]
+        kind = [u"albums"]
         hrefs = [0]
         return (self.executeLetters(query, header,kind,hrefs))
     
@@ -31,7 +31,7 @@ class AlbumModel(Model):
     def get( self, req , par):
         header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
         TitleContent = u"Альбом \"%s\" является сборником." %(par)
-        kind = ["tracks","bands",None,None]
+        kind = [u"tracks","bands",None,None]
         result = []
         hrefs = [0,0,-4,-4]    
         query = """select distinct bands.description from bands, tracks, tracks_album, albums,
@@ -63,7 +63,7 @@ class AlbumModel(Model):
     def getAll( self, req , par):
         result = []
         hrefs = [0]
-        kind = ["albums"]
+        kind = [u"albums"]
         query = """select distinct  Description from Albums,
                      (select distinct  album_id as id  , count(album_id) as count from  tracks_album
                       group by album_id ) t1
@@ -87,7 +87,7 @@ class AlbumModel(Model):
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
-        kind = ["albums"]
+        kind = [u"albums"]
         result = []
         hrefs = [0]
         query = "select distinct  Description from Albums where description like '%s'" % (par+'%')

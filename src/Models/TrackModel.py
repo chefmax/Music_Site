@@ -22,7 +22,7 @@ class TrackModel(Model):
     def getLetters( self, req ):
         query = "SELECT distinct substr(Description,1,1) FROM Tracks group by Description order by Description"
         header = [""]
-        kind = ["tracks"]
+        kind = [u"tracks"]
         hrefs = [0]
         return (self.executeLetters(query, header,kind,hrefs))
     
@@ -30,7 +30,7 @@ class TrackModel(Model):
     def get( self, req , par):
         result = []
         hrefs = [0,-4,-4]
-        kind = ["download",None]
+        kind = [u"download",None]
         query = """select distinct tracks.description, style.description from tracks,style
                    where tracks.style = style.id and tracks.description like '%s'
                  """ % (par)
@@ -49,7 +49,7 @@ class TrackModel(Model):
  
             """ % (par,par)
         header = [u"Формат",u"Битрейт",u"Цена"]
-        kind = ["download",None,None]
+        kind = [u"download",None,None]
         result.append(self.execute(query, header,kind,hrefs))
         hrefs = [0]
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
@@ -60,7 +60,7 @@ class TrackModel(Model):
                     and tracks_album.album_id = albums.id  and t1.count > 1 and t1.id = albums.id 
                 """ % (par)
         header = [u"Сборники"]
-        kind = ["albums"]
+        kind = [u"albums"]
         result.append(self.execute(query, header,kind,hrefs))
         query = """ select distinct  albums.description from albums,tracks, tracks_album,
                         (select distinct  album_id as id  , count(bands.id) as count from  tracks_album,bands,tracks
@@ -78,7 +78,7 @@ class TrackModel(Model):
     def getAll( self, req , par):
         result = []
         hrefs = [0,0,-4,-4]
-        kind = ["tracks","bands",None,None]
+        kind = [u"tracks",u"bands",None,None]
         query ="""select distinct  Tracks.Description as Name,Bands.description as Owner, Style.Description as Style, Tracks.length as Length 
                   from Tracks, Bands, Style
                   where Tracks.band_id = Bands.id and Style.id = Tracks.style"""
@@ -90,7 +90,7 @@ class TrackModel(Model):
 
     def getAllByLetter( self, req , par):
         result = []
-        kind = ["tracks","bands",None,None]
+        kind = [u"tracks",u"bands",None,None]
         hrefs = [0,0,-4,-4]
         query ="""select distinct  Tracks.Description as Name,Bands.description as Owner, Style.Description as Style, Tracks.length as Length 
                   from Tracks, Bands, Style
