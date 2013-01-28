@@ -30,7 +30,7 @@
 				<ul>
 					<li><a href="{{root_path}}">Главная</a></li>
 					<li><a href="{{root_path}}bands/">Группы</a></li>
-					<li><a href="{{root_path}}albums/">Песни</a></li>
+					<li><a href="{{root_path}}tracks/">Песни</a></li>
 				</ul>
 			</nav>
 		</header>

@@ -1,5 +1,5 @@
 '''
-Created on 20.01.2013
+Created on 14.01.2013
 
 @author: chef
 '''
@@ -9,14 +9,17 @@ from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
 import Models
 
-class BandsByLetterController(Controller):
+class CssJsController(Controller):
     
     @classmethod
     def getController(cls):
         if cls.Controller == None:
-            cls.Controller = BandsByLetterController()
+            cls.Controller = CssJsController()
         return cls.Controller 
     
     def get( self, req , method, par):
-        model = Models.BandsByLetterModel.BandsByLetterModel.getModel()
+        model = Models.CssJsModel.CssJsModel.getModel()
         return model.get(req,par)
+
+
+
