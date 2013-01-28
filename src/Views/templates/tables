@@ -3,7 +3,7 @@
 	{% set header = table[1] %}
 	{% set hrefs = table[2] %}
 	{% set kind = table[3] %}
-	<table border = "1px solid black" class = "sortable">
+	<table  class = "sortable">
 	<thead>
 	<tr>
 		{% for i in header %}

@@ -39,13 +39,29 @@ class BandModel(Model):
         result.append(self.execute(query, header,kind,hrefs))
         
         hrefs = [0]
+        header = [u"Сборники"]
         kind = [u"albums"]
-        query = """select distinct Albums.description  
-                   from tracks, Albums, Bands, tracks_album 
-                   where Bands.id = Tracks.band_id and bands.description like '%s' 
-                         and tracks.id = tracks_album.track_id and tracks_album.album_id = albums.id
-                """ % (par)
-        header = [u"Название альбома"]
+        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
+                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id ) t1   
+                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
+                          and tracks_album.album_id = albums.id and bands.description like '%s'
+                          and t1.album_id = albums.id and t1.count > 1
+         """ % (par)
+        result.append(self.execute(query, header,kind,hrefs))
+        
+        hrefs = [0]
+        header = [u"Альбомы"]
+        kind = [u"albums"]
+        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
+                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id ) t1   
+                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
+                          and tracks_album.album_id = albums.id and bands.description like '%s'
+                          and t1.album_id = albums.id and t1.count = 1
+         """ % (par)
         result.append(self.execute(query, header,kind,hrefs))
         
         TitleContent = u"Группа \"%s\"" % (par)
