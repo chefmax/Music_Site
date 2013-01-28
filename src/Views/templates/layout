@@ -25,7 +25,7 @@
 	<div id =  "maket">
 	<div id="header-container">
 		<header class="wrapper clearfix">
-			<h1 id="title">Max Music Site!</h1>
+			<h1 id="title">Главная</h1>
 			<nav>
 				<ul>
 					<li><a href="{{root_path}}">Главная</a></li>
@@ -40,8 +40,8 @@
 			
 			<article>
 				<header>
-					<h1>Welcome to Max's music site!</h1>
-					<p> This site was created to learn python and some web. </p>
+					<h1>Добро пожаловать на учебный сайт!</h1>
+					<p> Сайт создан для изучения питона и не только его. </p>
 				</header>					
 				<section>
 					<h2> {{title}} </h2>
@@ -73,6 +73,7 @@
 
 				</form>	
 			</aside>
+			{{image}}
 			
 		</div> <!-- #main -->
 	</div> <!-- #main-container -->	

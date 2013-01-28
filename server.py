@@ -30,7 +30,7 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         kinds = ["bands","albums","tracks"]
         
         def getView(self,kind_of_controller):
-            if kind_of_controller == "js" or kind_of_controller == "css":
+            if kind_of_controller == "js" or kind_of_controller == "css" or kind_of_controller == "band_img":
                 return CssJsView.CssJsView()
             else:
                 return View.View()
@@ -45,6 +45,8 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                          return TrackController.TrackController.getController()
                elif kind_of_controller.lower() == "js" or kind_of_controller.lower() == "css":
                    return  CssJsController.CssJsController() 
+               elif kind_of_controller.lower() == "band_img":
+                   return  BandImgController.BandImgController()
                else:
                    return BandController.BandController()
         
@@ -105,14 +107,14 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         def getresult(self,params,root_url):  
     	    if str(params) == "None":
     		      TheView = View.View()
-    		      return TheView.getAll(self,None,None,root_url,None)
+    		      return TheView.getAll(self,None,None,root_url,None,None)
     	    else:
     		      TheController = self.getController(params[0])
     		      TheView = self.getView(params[0])
     		      method = self.getMethod(len(params),params)    
     		      string_template = self.getTemplate(params)
     		      request = TheController.get(self, method, string_template)
-            return TheView.getAll(self, request, params[0].lower(),root_url,params[0])
+            return TheView.getAll(self, request, method,root_url,params[0],string_template)
         
         def get_response(self):
             parameters = self.getParams()
@@ -126,6 +128,8 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                         self.typeContent = "text/css"
                 elif parameters[0] == "js":
                         self.typeContent = "text/javascript"
+                elif parameters[0] == "band_img":
+                    self.typeContent = "image/*"        
                 return self.getresult(parameters,self.getRootUrl()) 
             else:   
                 return self.getresult("None",self.getRootUrl()) 
@@ -141,6 +145,11 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                self.end_headers() 
                for i in request:
                    self.wfile.write(i)
+           elif self.typeContent == "image/*":
+               self.send_header("Content-type", self.typeContent)               
+               self.end_headers()          
+               self.wfile.write(request)
+                       
            else:   
                self.send_header("Content-type", "text/html")               
                self.send_header("Content-length", len(request.encode("utf-8")))

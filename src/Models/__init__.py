@@ -1,1 +1,1 @@
-__all__ = ["AlbumModel", "BandModel", "TrackModel","CssJsModel"]
+__all__ = ["AlbumModel", "BandModel", "TrackModel","CssJsModel","BandImgModel"]

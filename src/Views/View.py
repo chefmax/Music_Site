@@ -38,7 +38,7 @@ class View(object):
         return header
 
 
-    def getAll(self, req, parameter ,typeOfLink, root_url , kindOf):
+    def getAll(self, req, parameter ,method, root_url , kindOf , stringTemplate):
         self.LevelsUp = ""
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
@@ -46,6 +46,11 @@ class View(object):
         layout = env.get_template("layout")
         tables = env.get_template("tables")
         letters = env.get_template("letters")
+        if (kindOf == "bands") and (method == "get"):
+            image = env.get_template("img")
+            img = image.render(path = root_url + "band_img/" + stringTemplate)
+        else:
+            img = ""    
         if (parameter != None):
             head = parameter[len(parameter)-1][0]
             parameter.pop()
@@ -56,6 +61,6 @@ class View(object):
             head = "Root" 
             lettersToInsert = ""
          
-        return layout.render(lettersContent = lettersToInsert,
+        return layout.render(image = img, lettersContent = lettersToInsert,
                              content = tables.render(tables = parameter,  root_path = root_url),
                              title = head,root_path = root_url, kind = kindOf ) 

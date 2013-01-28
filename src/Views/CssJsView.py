@@ -25,5 +25,5 @@ class CssJsView(object):
     
     def get(self, req, parameter ,typeOfLink , header): pass
 
-    def getAll(self, req, parameter ,typeOfLink, root_url , kindOf):
+    def getAll(self, req, parameter ,method, root_url , kindOf , stringTemplate):
         return parameter
