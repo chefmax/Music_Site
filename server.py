@@ -64,16 +64,8 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 return template.findall(unparsed_parameters)   
 
         def getRootUrl(self):
-          return "http://" + str(self.getIp()) + ":8000/"
-        
-        
-      
-        
-        def getIp(self):
-            if self.ip == None:
-                return urllib2.urlopen('http://ip.42.pl/raw').read()
-            else:
-                return self.ip
+          return "/"
+
 
 
         def getTemplate(self,parameters):

@@ -16,7 +16,8 @@ class BandController(Controller):
         if cls.Controller == None:
             cls.Controller = BandController()
         return cls.Controller 
-    
+    # TODO
+    # Переписать!
     def get(self, req , meth, par):
         model = Models.BandModel.BandModel.getModel()
         if meth == "get":

@@ -17,6 +17,8 @@ class AlbumController(Controller):
             cls.Controller = AlbumController()
         return cls.Controller 
     
+    # TODO
+    # Переписать!
     def get( self, req , method, par):
         model = Models.AlbumModel.AlbumModel.getModel()
         if method == "get":

@@ -62,6 +62,7 @@
 			<aside id = "catalog"  >
 				<h3 onclick="change('head')"> Поиск</h3>
 				<form id = "head" style="display:none">
+					
 					Что ищем: <SELECT NAME="kind" SIZE=1  >
 						<OPTION value = "tracks" {% if kind =="tracks" %} selected {% endif %} >Песни </option>
 						<OPTION value = "albums" {% if kind =="albums" %} selected {% endif %}> Альбомы </option>

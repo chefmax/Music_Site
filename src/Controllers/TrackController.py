@@ -18,14 +18,12 @@ class TrackController(Controller):
             cls.Controller = TrackController()
         return cls.Controller   
         
-    
+    # TODO
+    # Переписать!
     def get( self, req , method, par):
         model = Models.TrackModel.TrackModel.getModel()
-        if method == "get":
-            return model.get(req,par)
-        elif method == "getAll":
-            return model.getAll(req,par)
-        elif method == "getAllByLetter":
-            return model.getAllByLetter(req,par)
-        else:
+        try:
+            getattr(model, method)()
+        except Exception, e:
             return "Error! This method doesn't exist!"
+            

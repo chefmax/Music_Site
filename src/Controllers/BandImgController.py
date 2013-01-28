@@ -17,6 +17,8 @@ class BandImgController(Controller):
             cls.Controller = BandImgController()
         return cls.Controller 
     
+    # TODO
+    # Переписать!
     def get( self, req , method, par):
         model = Models.BandImgModel.BandImgModel.getModel()
         return model.get(req,par)
