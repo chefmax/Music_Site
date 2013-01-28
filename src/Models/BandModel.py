@@ -21,7 +21,7 @@ class BandModel(Model):
     def getLetters( self, req ):
         query = "SELECT distinct substr(Description,1,1) FROM Bands group by Description order by Description"
         header = [""]
-        kind = ["bands"]
+        kind = [u"bands"]
         hrefs = [0]
         return (self.executeLetters(query, header,kind,hrefs))
     
@@ -29,7 +29,7 @@ class BandModel(Model):
     def get( self, req , par):
         result = []
         hrefs = [0,-4,-4] 
-        kind = ["tracks",None,None]
+        kind = [u"tracks",None,None]
         query = """select distinct tracks.description as track, Style.description as style , tracks.length as length 
                    from tracks, Style, Bands
                    where tracks.Style = style.id and Bands.id = Tracks.band_id and bands.description like '%s'
@@ -39,13 +39,29 @@ class BandModel(Model):
         result.append(self.execute(query, header,kind,hrefs))
         
         hrefs = [0]
-        kind = ["albums"]
-        query = """select distinct Albums.description  
-                   from tracks, Albums, Bands, tracks_album 
-                   where Bands.id = Tracks.band_id and bands.description like '%s' 
-                         and tracks.id = tracks_album.track_id and tracks_album.album_id = albums.id
-                """ % (par)
-        header = [u"Название альбома"]
+        header = [u"Сборники"]
+        kind = [u"albums"]
+        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
+                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id ) t1   
+                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
+                          and tracks_album.album_id = albums.id and bands.description like '%s'
+                          and t1.album_id = albums.id and t1.count > 1
+         """ % (par)
+        result.append(self.execute(query, header,kind,hrefs))
+        
+        hrefs = [0]
+        header = [u"Альбомы"]
+        kind = [u"albums"]
+        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
+                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
+                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
+                         group by tracks_album.album_id ) t1   
+                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
+                          and tracks_album.album_id = albums.id and bands.description like '%s'
+                          and t1.album_id = albums.id and t1.count = 1
+         """ % (par)
         result.append(self.execute(query, header,kind,hrefs))
         
         TitleContent = u"Группа \"%s\"" % (par)
@@ -66,7 +82,7 @@ class BandModel(Model):
     def getAllByLetter(self, req , par):
         result = []
         hrefs = [0,-4]
-        kind = ["bands",None]
+        kind = [u"bands",None]
         query = "select distinct Description, MembersNumber from Bands where description like '%s'" % (par+'%')
         header = [u"Название группы",u"Число участников"]
         TitleContent = u"Группы на букву \"%s\":" % (par)

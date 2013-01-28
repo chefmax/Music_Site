@@ -2,18 +2,25 @@
  * ==|== normalize ==========================================================
  */
 
-
 section {
 	float: both;
 	clear: both;
 }
 
-.outer { float: both;}
 
-.title {
-	float: left;
-	padding: 15px;
+
+#rasporka {height: 50px;}
 }
+.titlee {
+	float: left;
+	padding: 2px;
+	margin: 3px;
+	border: 4px solid blue;
+}
+body,html {height: 100%;width:100%; margin: 0; padding: 0;}
+
+#maket {margin:0px; ; min-height: 100%; padding: 0px;}
+
 
 #first { padding: 15px;}
 
@@ -31,6 +38,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
 audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
 audio:not([controls]) { display: none; }
 [hidden] { display: none; }
+
 
 html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 body { margin: 0; font-size: 13px; line-height: 1.231; }
@@ -83,7 +91,7 @@ textarea { overflow: auto; vertical-align: top; resize: vertical; }
 input:valid, textarea:valid {  }
 input:invalid, textarea:invalid { background-color: #f0dddd; }
 
-table { border-collapse: collapse; border-spacing: 0;font-size: 12px; float: left; padding: 25px; }
+table { border-collapse: collapse; border-spacing: 0;font-size: 12px; float: left; margin: 25px; }
 td { vertical-align: top; }
 
 
@@ -98,6 +106,7 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 .wrapper{
 	width:90%;
 	margin:0 5%;
+	height: 100%;
 }
 
 /* ===================
@@ -105,7 +114,7 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
    =================== */
 
 #header-container{ border-bottom: 20px solid #e44d26; }
-#footer-container{ border-top:    20px solid #e44d26; }
+#footer-container{ border-top:    20px solid #e44d26;height: 50px; margin-top:-50px;   }
 #main aside      { border-top:    20px solid #e44d26; }
 
 #header-container,

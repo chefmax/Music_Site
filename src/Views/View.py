@@ -12,7 +12,7 @@ from jinja2 import Template
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
 
-class AbstractView(object):
+class View(object):
     
     View = None
     NumberOfLevels = 0
@@ -38,8 +38,7 @@ class AbstractView(object):
         return header
 
 
-    def getAll(self, req, parameter ,typeOfLink, NumberOfLevels ):
-        self.NumberOfLevels = NumberOfLevels
+    def getAll(self, req, parameter ,method, root_url , kindOf , stringTemplate):
         self.LevelsUp = ""
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
@@ -47,16 +46,21 @@ class AbstractView(object):
         layout = env.get_template("layout")
         tables = env.get_template("tables")
         letters = env.get_template("letters")
+        if (kindOf == "bands") and (method == "get"):
+            image = env.get_template("img")
+            img = image.render(path = root_url + "band_img/" + stringTemplate)
+        else:
+            img = ""    
         if (parameter != None):
             head = parameter[len(parameter)-1][0]
             parameter.pop()
             chars = parameter[len(parameter)-1]
             parameter.pop()
-            lettersToInsert = letters.render(Levels = NumberOfLevels, row = chars)
+            lettersToInsert = letters.render(root_path = root_url, row = chars)
         else:
-            head = "Root" 
+            head = u"Добрый день!" 
             lettersToInsert = ""
          
-        return layout.render(lettersContent = lettersToInsert,
-                             content = tables.render(tables = parameter,  Levels = NumberOfLevels),
-                             title = head,Levels = NumberOfLevels ) 
+        return layout.render(image = img, lettersContent = lettersToInsert,
+                             content = tables.render(tables = parameter,  root_path = root_url),
+                             title = head,root_path = root_url, kind = kindOf ) 

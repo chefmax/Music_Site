@@ -1,6 +1,7 @@
 .pydevproject
 *.py[cod]
 title.html*
+.htaccess
 # C extensions
 *.so
 

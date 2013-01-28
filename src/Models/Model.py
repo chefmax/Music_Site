@@ -9,7 +9,6 @@ import sqlite3
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
 import re
-from mod_python import apache
 
 class Model:
     
