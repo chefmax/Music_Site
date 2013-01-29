@@ -76,7 +76,9 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 return parameters[len(parameters)-1]
             elif method == "getAllByLetter":
                   return parameters[len(parameters)-1]
-            else:
+            elif parameters[0] == "band_img":
+                  return parameters[len(parameters)-1]
+            else:      
                    return None
 
 
@@ -89,24 +91,15 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		              return "get"
 
 
-
-        def getLevel(self,params):
-    	    if params[len(params)-2] == "num":
-                return int(params[len(params)-1])
-    	    else:
-    	        return len(params)/2
-
         def getresult(self,params,root_url):  
     	    if str(params) == "None":
-    		      TheView = View.View()
-    		      return TheView.getAll(self,None,None,root_url,None,None)
+    		      TheView = RootView.RootView()
+    		      return TheView.getAll(None,root_url,None)
     	    else:
     		      TheController = self.getController(params[0])
-    		      TheView = self.getView(params[0])
     		      method = self.getMethod(len(params),params)    
     		      string_template = self.getTemplate(params)
-    		      request = TheController.get(self, method, string_template)
-            return TheView.getAll(self, request, method,root_url,params[0],string_template)
+            return TheController.get(self,method,string_template,root_url)
         
         def get_response(self):
             parameters = self.getParams()

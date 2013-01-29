@@ -8,8 +8,19 @@ from Controllers.Controller import Controller
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
 import Models
+from Views import AlbumView
 
 class AlbumController(Controller):
+
+    def getModel(self):
+        if self.Model is None:
+            self.Model = Models.AlbumModel.AlbumModel()
+        return self.Model
+
+    def getView(self):
+        if self.View is None:
+            self.View = AlbumView.AlbumView()
+        return self.View
     
     @classmethod
     def getController(cls):
@@ -18,15 +29,13 @@ class AlbumController(Controller):
         return cls.Controller 
     
     # TODO
-    # Переписать!
-    def get( self, req , method, par):
-        model = Models.AlbumModel.AlbumModel.getModel()
-        if method == "get":
-            return model.get(req,par)
-        elif method == "getAll":
-            return model.getAll(req,par)
-        elif method == "getAllByLetter":
-            return model.getAllByLetter(req,par)
-        else:
+    # rewrite
+    def get( self, req , method, par,root_url):
+        model = self.getModel()
+        try:
+            request = getattr(model, method)(req,par)
+            theView = self.getView()
+            theView.lastTryToFound = model.toFind
+            return theView.getAll(request , root_url,"")
+        except Exception, e:
             return "Error! This method doesn't exist!"
-

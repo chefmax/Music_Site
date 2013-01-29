@@ -20,6 +20,7 @@
 	<script src="{{root_path}}js/libs/modernizr-2.0.6.min.js"></script>
 	<script src="{{root_path}}js/libs/tablesort.js"></script>
 	<script src="{{root_path}}js/libs/hide_search.js"></script>
+	<script src="{{root_path}}js/libs/cookies.js"></script>
 </head>
 <body>
 	<div id =  "maket">
@@ -69,7 +70,7 @@
 						<OPTION value = "bands" {% if kind =="bands" %} selected {% endif %}> Группы</option>
 					</SELECT>
 					<br> <br><b>
-					Название: <INPUT NAME= "fl" SIZE= "20" MAXLENGTH= "20"> <BR>	
+					Название: <INPUT NAME= "fl" SIZE= "20" MAXLENGTH= "20" value = {{last}}> <BR>	
 					<p><input type="submit"></p>
 
 				</form>	

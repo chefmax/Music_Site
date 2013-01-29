@@ -13,7 +13,7 @@ import re
 class Model:
     
     connection = None
-    
+    toFind = ""
     Model = None
     
     @classmethod

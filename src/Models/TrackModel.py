@@ -89,6 +89,7 @@ class TrackModel(Model):
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
+        self.toFind = par
         result = []
         kind = [u"tracks",u"bands",None,None]
         hrefs = [0,0,-4,-4]

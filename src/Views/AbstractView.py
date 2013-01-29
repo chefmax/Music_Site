@@ -12,18 +12,16 @@ from jinja2 import Template
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
 
-class CssJsView(object):
+class AbstractView(object):
     
-    View = None
-    NumberOfLevels = 0
-    LevelsUp = ""
-    
+    lastTryToFound = ""
     @classmethod
     def getView(cls):pass
       
         
     
-    def get(self, parameter ,typeOfLink , header): pass
+    def get(self,  parameter ,typeOfLink , header): pass
+    
 
-    def getAll(self, parameter , root_url  , stringTemplate):
-        return parameter
+
+    def getAll(self, parameter , root_url , stringTemplate): pass

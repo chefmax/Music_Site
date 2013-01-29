@@ -11,19 +11,18 @@ import re
 from jinja2 import Template
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
+from Views.AbstractView import AbstractView
 
-class View(object):
+
+class BandView(AbstractView):
     
     View = None
-    NumberOfLevels = 0
-    LevelsUp = ""
+
     
     @classmethod
     def getView(cls):pass
       
         
-    
-    def get(self, req, parameter ,typeOfLink , header): pass
     
     def getParams(self,req):
         unparsed_parameters = "".join(req.args)
@@ -38,29 +37,25 @@ class View(object):
         return header
 
 
-    def getAll(self, req, parameter ,method, root_url , kindOf , stringTemplate):
+    def getAll(self, parameter , root_url  , stringTemplate):
         self.LevelsUp = ""
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
-        
         layout = env.get_template("layout")
         tables = env.get_template("tables")
         letters = env.get_template("letters")
-        if (kindOf == "bands") and (method == "get"):
+        if parameter[0] == '1':
             image = env.get_template("img")
             img = image.render(path = root_url + "band_img/" + stringTemplate)
         else:
             img = ""    
-        if (parameter != None):
-            head = parameter[len(parameter)-1][0]
-            parameter.pop()
-            chars = parameter[len(parameter)-1]
-            parameter.pop()
-            lettersToInsert = letters.render(root_path = root_url, row = chars)
-        else:
-            head = u"Добрый день!" 
-            lettersToInsert = ""
-         
+        parameter.pop(0)
+        head = parameter[len(parameter)-1][0]
+        parameter.pop()
+        chars = parameter[len(parameter)-1]
+        parameter.pop()
+        lettersToInsert = letters.render(root_path = root_url, row = chars)
+
         return layout.render(image = img, lettersContent = lettersToInsert,
                              content = tables.render(tables = parameter,  root_path = root_url),
-                             title = head,root_path = root_url, kind = kindOf ) 
+                             title = head,root_path = root_url, kind = "bands" , last = self.lastTryToFound) 

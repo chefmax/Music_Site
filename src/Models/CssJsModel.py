@@ -18,7 +18,7 @@ class CssJsModel(Model):
         return cls.Model
     
     def get( self, req , par):
-        source = open(par,"r+")
+        source = open(par,"r")
         result = source.readlines()   
         source.close()
         return result

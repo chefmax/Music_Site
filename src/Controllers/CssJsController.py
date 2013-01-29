@@ -16,10 +16,16 @@ class CssJsController(Controller):
         if cls.Controller == None:
             cls.Controller = CssJsController()
         return cls.Controller 
+
+    def getModel(self):
+        if self.Model is None:
+            self.Model = Models.CssJsModel.CssJsModel()
+        return self.Model    
+
     
-    def get( self, req , method, par):
-        model = Models.CssJsModel.CssJsModel.getModel()
-        return model.get(req,par)
+    def get( self, req , method, par,root_url):
+        model = self.getModel()
+        return getattr(model, "get")(req,par)
 
 
 

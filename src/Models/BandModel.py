@@ -27,7 +27,7 @@ class BandModel(Model):
     
     
     def get( self, req , par):
-        result = []
+        result = ["1"]
         hrefs = [0,-4,-4] 
         kind = [u"tracks",None,None]
         query = """select distinct tracks.description as track, Style.description as style , tracks.length as length 
@@ -69,7 +69,7 @@ class BandModel(Model):
         return self.addTitle(TitleContent, result)
 
     def getAll(self, req , par):
-        result = []
+        result = ["0"]
         hrefs = [0,-4]
         kind = ["bands",None]
         query = "select distinct  Description, MembersNumber from Bands"
@@ -79,8 +79,10 @@ class BandModel(Model):
         result.append(self.getLetters(req))
         return self.addTitle(TitleContent, result)
 
+
     def getAllByLetter(self, req , par):
-        result = []
+        self.toFind = par
+        result = ["0"]
         hrefs = [0,-4]
         kind = [u"bands",None]
         query = "select distinct Description, MembersNumber from Bands where description like '%s'" % (par+'%')

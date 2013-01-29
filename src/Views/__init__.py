@@ -1,1 +1,1 @@
-__all__ = ["View","CssJsView"]
+__all__ = ["RootView","CssJsView","AbstractView","TrackView","SimpleView","AlbumView","BandView"]

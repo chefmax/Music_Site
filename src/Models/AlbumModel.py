@@ -87,6 +87,7 @@ class AlbumModel(Model):
         return self.addTitle(TitleContent, result)
 
     def getAllByLetter( self, req , par):
+        self.toFind = par
         kind = [u"albums"]
         result = []
         hrefs = [0]

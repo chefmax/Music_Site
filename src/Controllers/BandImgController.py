@@ -16,10 +16,15 @@ class BandImgController(Controller):
         if cls.Controller == None:
             cls.Controller = BandImgController()
         return cls.Controller 
+
+    def getModel(self):
+        if self.Model is None:
+            self.Model = Models.BandImgModel.BandImgModel()
+        return self.Model    
     
     # TODO
-    # Переписать!
-    def get( self, req , method, par):
-        model = Models.BandImgModel.BandImgModel.getModel()
-        return model.get(req,par)
-
+    # rewrite!
+    def get( self, req , method, par,root_url):
+        model = self.getModel()
+        result = getattr(model, 'get')(req,par)
+        return result    

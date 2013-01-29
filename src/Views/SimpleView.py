@@ -15,8 +15,6 @@ from jinja2.environment import Environment
 class CssJsView(object):
     
     View = None
-    NumberOfLevels = 0
-    LevelsUp = ""
     
     @classmethod
     def getView(cls):pass
@@ -25,5 +23,5 @@ class CssJsView(object):
     
     def get(self, parameter ,typeOfLink , header): pass
 
-    def getAll(self, parameter , root_url  , stringTemplate):
+    def getAll(self, parameter , root_url , stringTemplate):
         return parameter
