@@ -5,12 +5,15 @@ Created on 14.01.2013
 @author: chef
 '''
 import sys
+from peewee  import *
 from os.path import dirname, realpath, sep, pardir
+from Tables import *
 sys.path.append(dirname(realpath(__file__)))
-from Models.Model import Model
-import sqlite3
+import re
+from AbstractModel import AbstractModel
 
-class BandImgModel(Model):
+
+class BandImgModel(AbstractModel):
     
     @classmethod
     def getModel(cls):
@@ -19,6 +22,7 @@ class BandImgModel(Model):
         return cls.Model
     
     def get( self, req , par):
-        query = "SELECT distinct img FROM Bands where description like '%s'" %(par)
-        cursor = self.getConnection().cursor()       
-        return cursor.execute(query).fetchone()[0]
+        res =  Bands.select(Bands.img,Bands.description)
+        for iter in res:
+            if str(iter.description).lower() == par.lower():
+                return iter.img

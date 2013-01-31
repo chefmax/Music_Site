@@ -16,7 +16,7 @@ class TrackController(Controller):
         if self.Model is None:
             self.Model = Models.TrackModel.TrackModel()
         return self.Model
-    
+
     def getView(self):
         if self.View is None:
             self.View =  TrackView.TrackView()

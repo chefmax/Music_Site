@@ -5,89 +5,103 @@ Created on 14.01.2013
 @author: chef
 '''
 import sys
+from peewee  import *
 from os.path import dirname, realpath, sep, pardir
+from Tables import *
 sys.path.append(dirname(realpath(__file__)))
-from Models.Model import Model
+import re
+from AbstractModel import AbstractModel
 
-class BandModel(Model):
+class BandModel(AbstractModel):
     
-    @classmethod
-    def getModel(cls):
-        if cls.Model == None:
-            cls.Model = BandModel()
-        return cls.Model
-    
-    
-    def getLetters( self, req ):
-        query = "SELECT distinct substr(Description,1,1) FROM Bands group by Description order by Description"
+    def getLetters( self ):
+        query = Bands.select(Bands.description).order_by(Bands.description)
+        table = []
+        for iter in query:
+            table.append(str(iter.description)[0].lower())
+        table = list(set(table))
+        table.sort()
         header = [""]
         kind = [u"bands"]
         hrefs = [0]
-        return (self.executeLetters(query, header,kind,hrefs))
+        return self.addTable(table, header, kind, hrefs)
+    
+    
+    def getResult(self,title,condition):
+        result = ["0"]
+        hrefs = [0,-4]
+        kind = ["bands",None]
+        header = [u"Название группы",u"Число участников"]
+        TitleContent = u"Группы:"
+        if condition == None:
+            query = Bands.select(Bands.description,Bands.membersnumber)
+        else:
+            query = Bands.select(Bands.id,Bands.description,Bands.membersnumber).where(Bands.id << condition)
+            
+        table = []
+        buf = []
+        for iter in query:
+            buf.append(iter.description)
+            buf.append(iter.membersnumber)
+            table.append(buf)
+            buf = []
+        #print table
+        TitleContent = title
+        result.append(self.addTable(table, header, kind, hrefs))  
+        result.append(self.getLetters())
+        return self.addTitle(TitleContent, result)
+    
+    
     
     
     def get( self, req , par):
         result = ["1"]
         hrefs = [0,-4,-4] 
         kind = [u"tracks",None,None]
-        query = """select distinct tracks.description as track, Style.description as style , tracks.length as length 
-                   from tracks, Style, Bands
-                   where tracks.Style = style.id and Bands.id = Tracks.band_id and bands.description like '%s'
-                """ % (par)
         header = [u"Название песни",u"Стиль",u"Длина"]
         
-        result.append(self.execute(query, header,kind,hrefs))
+        query = Tracks.select(Tracks.description,Tracks.length,Tracks.band,Tracks.style).join(Bands).switch(Tracks).join(Style)
+        table = []
+        cond = []
+        row = []
+        for iter in query:
+            if (str(iter.band.description).lower() == par.lower()):
+                row.append(iter.description)
+                row.append(iter.style.description)
+                row.append(iter.length)
+                cond.append(iter.id)
+            table.append(row)
+            row = []
+                
+        result.append(self.addTable(table, header, kind, hrefs))
+        
+        condquery = Bands.select(Bands.id,Bands.description)
+        for it in condquery:
+            if str(it.description).lower() == par.lower():
+                cond.append(Bands.id)
+        divAlbs = self.divAlbums(cond)
         
         hrefs = [0]
-        header = [u"Сборники"]
+
         kind = [u"albums"]
-        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
-                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
-                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
-                         group by tracks_album.album_id ) t1   
-                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
-                          and tracks_album.album_id = albums.id and bands.description like '%s'
-                          and t1.album_id = albums.id and t1.count > 1
-         """ % (par)
-        result.append(self.execute(query, header,kind,hrefs))
-        
-        hrefs = [0]
         header = [u"Альбомы"]
-        kind = [u"albums"]
-        query = """select distinct albums.description from bands, tracks, tracks_album, albums,
-                        (select distinct  album_id as album_id  , count(bands.id) as count from  tracks_album,bands,tracks
-                         where tracks_album.track_id = tracks.id and tracks.band_id = bands.id  
-                         group by tracks_album.album_id ) t1   
-                    where bands.id = tracks.band_id and tracks.id = tracks_album.track_id 
-                          and tracks_album.album_id = albums.id and bands.description like '%s'
-                          and t1.album_id = albums.id and t1.count = 1
-         """ % (par)
-        result.append(self.execute(query, header,kind,hrefs))
-        
-        TitleContent = u"Группа \"%s\"" % (par)
-        result.append(self.getLetters(req))
-        return self.addTitle(TitleContent, result)
+        result.append(self.addTable(divAlbs[0], header, kind, hrefs))
+        header = [u"Сборники"]
+        result.append(self.addTable(divAlbs[1], header, kind, hrefs)) 
+        result.append(self.getLetters())
+        TitleContent = u"Песня \"%s\":" % (par) 
+        return self.addTitle(TitleContent, result) 
 
     def getAll(self, req , par):
-        result = ["0"]
-        hrefs = [0,-4]
-        kind = ["bands",None]
-        query = "select distinct  Description, MembersNumber from Bands"
-        header = [u"Название группы",u"Число участников"]
-        TitleContent = u"Группы:"        
-        result.append(self.execute(query, header,kind,hrefs))
-        result.append(self.getLetters(req))
-        return self.addTitle(TitleContent, result)
+        return self.getResult(u"Группы:",None)
 
 
     def getAllByLetter(self, req , par):
         self.toFind = par
-        result = ["0"]
-        hrefs = [0,-4]
-        kind = [u"bands",None]
-        query = "select distinct Description, MembersNumber from Bands where description like '%s'" % (par+'%')
-        header = [u"Название группы",u"Число участников"]
+        condquery = Bands.select(Bands.description,Bands.id)
+        cond = []
+        for iter in condquery:
+            if str(iter.description).lower().find(str(par).lower()) == 0:
+                cond.append(iter.id)
         TitleContent = u"Группы на букву \"%s\":" % (par)
-        result.append(self.execute(query, header,kind,hrefs))
-        result.append(self.getLetters(req))
-        return self.addTitle(TitleContent, result)
+        return self.getResult(TitleContent,cond)

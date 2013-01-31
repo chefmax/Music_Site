@@ -29,10 +29,10 @@ class BandController(Controller):
 
     def get( self, req , method, par, root_url):
         model = self.getModel()
-        try:
-            request = getattr(model, method)(req,par)  
-            theView = self.getView()
-            theView.lastTryToFound = model.toFind
-            return theView.getAll(request , root_url,par)
-        except Exception, e:
-            return "Error! This method '%s' doesn't exist!" %(method)
+      #  try:
+        request = getattr(model, method)(req,par)  
+        theView = self.getView()
+        theView.lastTryToFound = model.toFind
+        return theView.getAll(request , root_url,par)
+       # except Exception, e:
+        #    return "Error! This method '%s' doesn't exist!" %(method)

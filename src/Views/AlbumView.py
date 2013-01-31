@@ -39,7 +39,6 @@ class AlbumView(AbstractView):
     def getAll(self, parameter , root_url  , stringTemplate):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
-        
         layout = env.get_template("layout")
         tables = env.get_template("tables")
         letters = env.get_template("letters")

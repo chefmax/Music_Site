@@ -7,9 +7,8 @@ Created on 14.01.2013
 import sys
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
-from Models.Model import Model
 
-class CssJsModel(Model):
+class CssJsModel(object):
     
     @classmethod
     def getModel(cls):
