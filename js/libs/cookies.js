@@ -35,6 +35,7 @@
                                 document.cookie = curCookie
 
         }
+        
 
         window.onload = createCookie 
 })()

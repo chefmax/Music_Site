@@ -11,8 +11,8 @@ import re
 from jinja2 import Template
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
-
-class CssJsView(object):
+from Views.AbstractView import AbstractView
+class CssJsView(AbstractView):
     
     View = None
     NumberOfLevels = 0

@@ -9,18 +9,18 @@
 
 
 
-	<title></title>
+	<title>{{title}} </title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-
+	
 	<link rel="stylesheet" href="{{root_path}}css/style.css">
 
 	<script src="{{root_path}}js/libs/modernizr-2.0.6.min.js"></script>
-	<script src="{{root_path}}js/libs/tablesort.js"></script>
+	<!--<script src="{{root_path}}js/libs/tablesort.js"></script>-->
 	<script src="{{root_path}}js/libs/hide_search.js"></script>
-<!---	<script src="{{root_path}}js/libs/cookies.js"></script> -->
+	<script src="{{root_path}}js/libs/cookies.js"></script> 
 </head>
 <body>
 	<div id =  "maket">
