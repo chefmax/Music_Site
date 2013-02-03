@@ -16,34 +16,14 @@ from Views.AbstractView import AbstractView
 
 class RootView(AbstractView):
     
-    View = None
-
-    @classmethod
-    def getView(cls):pass
-      
-        
-    
-    def getParams(self,req):
-        unparsed_parameters = "".join(req.args)
-        template = re.compile("[^?&\/=]+")            
-        return  template.findall(unparsed_parameters)
-      
-    
-    
-    def getHeader(self,result):
-        header = result[len(result)-1]
-        result.pop()
-        return header
-
-
-    def getAll(self, parameter , root_url  , stringTemplate):
-        self.LevelsUp = ""
+    @classmethod  
+    def getAll(cls, parameter , root_url  , stringTemplate):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
         
-        layout = env.get_template("layout")
-        tables = env.get_template("tables")
-        letters = env.get_template("letters")
+        layout = env.get_template("layout.html")
+        tables = env.get_template("tables.html")
+        letters = env.get_template("letters.html")
         head = u"Добрый день!" 
         lettersToInsert = ""
          

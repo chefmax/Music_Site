@@ -7,16 +7,12 @@ Created on 14.01.2013
 import sys
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
+from AbstractModel import AbstractModel
 
-class CssJsModel(object):
-    
-    @classmethod
-    def getModel(cls):
-        if cls.Model == None:
-            cls.Model = CssJsModel()
-        return cls.Model
-    
-    def get( self, req , par):
+class CssJsModel(AbstractModel):
+
+    @classmethod    
+    def get( cls, par):
         source = open(par,"r")
         result = source.readlines()   
         source.close()

@@ -51,5 +51,5 @@
 		for (j = 0; j < l; j++) tb.appendChild(t.sarr[j][1])
 		obj.title = "Отсортировано по " + ((verse) ? "убыванию" : "возрастанию")
 	}
-	window.onload = prepTabs
+	window.addEventListener("load", prepTabs, false)
 })()

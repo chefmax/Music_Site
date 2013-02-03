@@ -10,24 +10,22 @@ from peewee  import *
 from os.path import dirname, realpath, sep, pardir
 from Tables import *
 sys.path.append(dirname(realpath(__file__)))
-import re
 from AbstractModel import AbstractModel
 
 class TrackModel(AbstractModel):
-  
-    def getLetters( self ):
-        query = Tracks.select(Tracks.description)
+    @classmethod  
+    def getLetters( cls ):
+        query = Tracks.select(fn.Substr(Tracks.description,1,1).alias("fl")).distinct().order_by(Tracks.description)
         table = []
         for iter in query:
-            table.append(str(iter.description)[0].lower())
-        table = list(set(table))
-        table.sort()
+            table.append(iter.fl.lower())
         header = [""]
         kind = [u"tracks"]
         hrefs = [0]
-        return self.addTable(table, header, kind, hrefs)
+        return cls.addTable(table, header, kind, hrefs)
     
-    def getResult(self,title,condition):
+    @classmethod
+    def getResult(cls,title,condition):
         result = []
         hrefs = [0,0,-4,-4]
         kind = [u"tracks",u"bands",None,None]
@@ -35,7 +33,7 @@ class TrackModel(AbstractModel):
         if condition == None:
             query = Tracks.select(Tracks.description,Tracks.band,Tracks.style,Tracks.length).distinct().join(Style).switch(Tracks).join(Bands)
         else:
-            query = Tracks.select(Tracks.description,Tracks.band,Tracks.style,Tracks.length).distinct().join(Style).switch(Tracks).join(Bands).where(Tracks.id << condition)
+            query = Tracks.select(Tracks.description,Tracks.band,Tracks.style,Tracks.length).distinct().join(Style).switch(Tracks).join(Bands).where(fn.Lower(fn.Substr(Tracks.description,1,len(condition))) == condition)
             
         table = []
         buf = []
@@ -47,27 +45,25 @@ class TrackModel(AbstractModel):
             table.append(buf)
             buf = []
         TitleContent = title
-        result.append(self.addTable(table, header, kind, hrefs))  
-        result.append(self.getLetters())
-        return self.addTitle(TitleContent, result)
+        result.append(cls.addTable(table, header, kind, hrefs))  
+        result.append(cls.getLetters())
+        return cls.addTitle(TitleContent, result)
 
-    
-    def get( self, req , par):
+    @classmethod
+    def get( cls, par):
         result = []
         hrefs = [0,-4]
         kind = [u"download",None]
         header = [u"Название песни",u"Стиль"]
         query = Tracks.select(Tracks.id,Tracks.description,Tracks.style)
         table = []
-        cond = []
         row = []
         for iter in query:
             if (str(iter.description).lower() == par.lower()):
                 row.append(iter.description)
                 row.append(iter.style.description)
-                cond.append(iter.id)
         table.append(row)
-        result.append(self.addTable(table, header, kind, hrefs))
+        result.append(cls.addTable(table, header, kind, hrefs))
         
         table = []
         rows = []
@@ -75,7 +71,7 @@ class TrackModel(AbstractModel):
         header = [u"Формат",u"Битрейт",u"Цена"]
         kind = [u"download",None,None]
         
-        query = Track_Format.select(Track_Format.format,Track_Format.track,Track_Format.bitrate).distinct().join(Formats).switch(Track_Format).join(Tracks).where(Track_Format.track << cond)
+        query = Track_Format.select(Track_Format.format,Track_Format.track,Track_Format.bitrate).distinct().join(Formats).switch(Track_Format).join(Tracks).where(fn.Lower(Tracks.description) == par.lower())
         for iter in query:
             rows.append(iter.format.description)
             rows.append(iter.bitrate)
@@ -86,35 +82,38 @@ class TrackModel(AbstractModel):
             table.append(rows)
             rows = []    
                     
-        result.append(self.addTable(table, header, kind, hrefs))
+        result.append(cls.addTable(table, header, kind, hrefs))
         
-        cond = []
-        condquery = Tracks.select(Tracks.id,Tracks.description)
-        for it in condquery:
-            if str(it.description).lower() == par.lower():
-                cond.append(Tracks.id)
-        divAlbs = self.divAlbums(cond)
-        
+        divAlbs = cls.divAlbums()
+        own = []
+        misc = []
+        query = Albums.select(Albums.description).distinct().join(Tracks_Album).join(Tracks).where(fn.Lower(Tracks.description) == par.lower())
+        for iter in query:
+            if iter.description in divAlbs[0]:
+                own.append([iter.description])
+            else:
+                misc.append([iter.description])
         hrefs = [0]
-
         kind = [u"albums"]
         header = [u"Альбомы"]
-        result.append(self.addTable(divAlbs[0], header, kind, hrefs))
+        result.append(cls.addTable(own, header, kind, hrefs))
         header = [u"Сборники"]
-        result.append(self.addTable(divAlbs[1], header, kind, hrefs)) 
-        result.append(self.getLetters())
+        result.append(cls.addTable(misc, header, kind, hrefs)) 
+        result.append(cls.getLetters())
         TitleContent = u"Песня \"%s\":" % (par) 
-        return self.addTitle(TitleContent, result) 
+        return cls.addTitle(TitleContent, result) 
         
-    def getAll( self, req , par):
-        return self.getResult(u"Все песни:",None)
+    @classmethod
+    def getAll( cls, par):
+        return cls.getResult(u"Все песни:",None)
 
-    def getAllByLetter( self, req , par):
-        self.toFind = par
+    @classmethod
+    def getAllByLetter( cls, par):
+        cls.toFind = par
         condquery = Tracks.select(Tracks)
         cond = []
         for iter in condquery:
             if str(iter.description).lower().find(par.lower()) == 0:
                 cond.append(iter.id)
         title = u"Все песни на букву \"%s\":" % (str(par))        
-        return self.getResult(title , cond) 
+        return cls.getResult(title , par.lower()) 
