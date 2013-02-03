@@ -19,17 +19,11 @@ class AlbumModel(AbstractModel):
         table = []
         for iter in query:
             table.append(iter.fl.lower())
-        header = [""]
-        kind = [u"albums"]
-        hrefs = [0]
-        return cls.addTable(table, header, kind, hrefs)
+        return table
    
     @classmethod    
-    def getResult(cls, title, condition):
+    def getResult(cls, condition):
         result = []
-        hrefs = [0]
-        kind = [u"albums"]
-        header = [u"Альбомы"]
         div = cls.divAlbums()
         albums = []
         misc = []
@@ -46,19 +40,14 @@ class AlbumModel(AbstractModel):
                 if album.lower().find(condition) == 0:
                     misc.append([album]) 
                        
-        result.append(cls.addTable(albums, header, kind, hrefs))
-        header = [u"Сборники"]    
-        result.append(cls.addTable(misc, header, kind, hrefs))    
+        result.append(albums)  
+        result.append(misc)    
         result.append(cls.getLetters())    
-        return cls.addTitle(title, result)
+        return result
     
     @classmethod    
     def get( cls, par):
-        header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
-        TitleContent = u"Альбом \"%s\"." %(par)
-        kind = ["tracks","bands",None,None]
-        result = []
-        hrefs = [0,0,-4,-4]         
+        result = []     
         table = []
         buf = []
         query = Tracks_Album.select(Tracks_Album.album,Tracks_Album.track,Tracks).distinct().join(Tracks).join(Bands).switch(Tracks_Album).join(Albums).where(fn.Lower(Albums.description) == par.lower())
@@ -70,16 +59,15 @@ class AlbumModel(AbstractModel):
             table.append(buf)
             buf = []
        
-        result.append(cls.addTable(table, header, kind, hrefs))  
+        result.append(table)  
         result.append(cls.getLetters())
-        return cls.addTitle(TitleContent, result)
+        return result
     
     @classmethod
     def getAll( cls, par):
-        return cls.getResult(u"Все альбомы:", None)
+        return cls.getResult(None)
     
     @classmethod
     def getAllByLetter( cls, par):
         cls.toFind = par
-        TitleContent = u"Альбомы на букву \"%s\":" % (par) 
-        return cls.getResult(TitleContent, par.lower())  
+        return cls.getResult( par.lower())  
