@@ -20,11 +20,11 @@ class BandView(AbstractView):
     def getAll(cls, parameter , root_url  , stringTemplate):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
-        layout = env.get_template("layout")
-        tables = env.get_template("tables")
-        letters = env.get_template("letters")
+        layout = env.get_template("layout.html")
+        tables = env.get_template("tables.html")
+        letters = env.get_template("letters.html")
         if parameter[0] == '1':
-            image = env.get_template("img")
+            image = env.get_template("img.html")
             img = image.render(path = root_url + "band_img/" + stringTemplate)
         else:
             img = ""    

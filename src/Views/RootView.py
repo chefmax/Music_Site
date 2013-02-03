@@ -21,9 +21,9 @@ class RootView(AbstractView):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
         
-        layout = env.get_template("layout")
-        tables = env.get_template("tables")
-        letters = env.get_template("letters")
+        layout = env.get_template("layout.html")
+        tables = env.get_template("tables.html")
+        letters = env.get_template("letters.html")
         head = u"Добрый день!" 
         lettersToInsert = ""
          

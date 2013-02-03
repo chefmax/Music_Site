@@ -19,9 +19,9 @@ class TrackView(AbstractView):
     def getAll(cls, parameter , root_url  , stringTemplate):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
-        layout = env.get_template("layout")
-        tables = env.get_template("tables")
-        letters = env.get_template("letters")
+        layout = env.get_template("layout.html")
+        tables = env.get_template("tables.html")
+        letters = env.get_template("letters.html")
         head = parameter[len(parameter)-1][0]
         parameter.pop()
         chars = parameter[len(parameter)-1]

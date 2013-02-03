@@ -17,7 +17,7 @@
 			<tr>	
 			{% for element in row %}
 				<th> 
-				{% if hrefs[colNum] < 0 %}
+				{% if kind[colNum] == None %}
 					{{element}}
 				{% else %}
 					<a href = "{{root_path}}{{kind[colNum]}}/{{element[0]}}/{{element}} "> {{element}} </a>
