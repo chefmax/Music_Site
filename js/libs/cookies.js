@@ -1,8 +1,12 @@
 (function(){
 
+
+
         createCookie = function(){
-        	if (getCookie("show_search") == null )
+        	if (getCookie("show_search") == null ){
         		return setCookie("show_search","NO","/")
+
+                }       
                 else if (getCookie("show_search") == "NO") {
                                 document.getElementById('head').style.display = 'none';
                                 return "NO"
@@ -37,5 +41,6 @@
         }
         
 
-        window.onload = createCookie 
+
+        window.addEventListener("load", createCookie, false)
 })()

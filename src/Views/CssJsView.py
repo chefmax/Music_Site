@@ -7,23 +7,9 @@ Created on 15.01.2013
 import sys 
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
-import re
-from jinja2 import Template
-from jinja2 import FileSystemLoader
-from jinja2.environment import Environment
 from Views.AbstractView import AbstractView
 class CssJsView(AbstractView):
     
-    View = None
-    NumberOfLevels = 0
-    LevelsUp = ""
-    
     @classmethod
-    def getView(cls):pass
-      
-        
-    
-    def get(self, parameter ,typeOfLink , header): pass
-
-    def getAll(self, parameter , root_url  , stringTemplate):
+    def getAll(cls, parameter , root_url  , stringTemplate):
         return parameter

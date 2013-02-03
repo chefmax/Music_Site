@@ -7,7 +7,6 @@ Created on 15.01.2013
 import sys 
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
-import re
 from jinja2 import Template
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
@@ -16,29 +15,9 @@ from Views.AbstractView import AbstractView
 
 class BandView(AbstractView):
     
-    View = None
-
     
-    @classmethod
-    def getView(cls):pass
-      
-        
-    
-    def getParams(self,req):
-        unparsed_parameters = "".join(req.args)
-        template = re.compile("[^?&\/=]+")            
-        return  template.findall(unparsed_parameters)
-      
-    
-    
-    def getHeader(self,result):
-        header = result[len(result)-1]
-        result.pop()
-        return header
-
-
-    def getAll(self, parameter , root_url  , stringTemplate):
-        self.LevelsUp = ""
+    @classmethod  
+    def getAll(cls, parameter , root_url  , stringTemplate):
         env = Environment()
         env.loader = FileSystemLoader(dirname(realpath(__file__)) + "/templates")
         layout = env.get_template("layout")
@@ -58,4 +37,4 @@ class BandView(AbstractView):
 
         return layout.render(image = img, lettersContent = lettersToInsert,
                              content = tables.render(tables = parameter,  root_path = root_url),
-                             title = head,root_path = root_url, kind = "bands" , last = self.lastTryToFound) 
+                             title = head,root_path = root_url, kind = "bands" , last = cls.lastTryToFound) 

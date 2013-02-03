@@ -13,10 +13,8 @@ for name in listdir(dirname(realpath(__file__))):
 	sys.path.append(realpath(__file__) + sep + str(name))
 sys.path.append(dirname(realpath(__file__)) + sep + "src")
 from Controllers import *
-from Models import *
 from Views import *
-import socket
-import urllib2
+
 
 
 
@@ -25,30 +23,21 @@ class ThreadingSimpleServer(SocketServer.ThreadingMixIn,BaseHTTPServer.HTTPServe
 
 class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	"""docstring for MusicSiteHandler"""
-        ip = None
         typeContent = "text/html"
-        kinds = ["bands","albums","tracks"]
-        
-        def getView(self,kind_of_controller):
-            if kind_of_controller == "js" or kind_of_controller == "css" or kind_of_controller == "band_img":
-                return CssJsView.CssJsView()
-            else:
-                return View.View()
-        
         
         def getController(self,kind_of_controller):
                if kind_of_controller.lower() == "albums":
-                         return AlbumController.AlbumController.getController()
+                         return AlbumController.AlbumController
                elif kind_of_controller.lower() == "bands":
-                         return BandController.BandController.getController()
+                         return BandController.BandController
                elif kind_of_controller.lower() == "tracks":
-                         return TrackController.TrackController.getController()
+                         return TrackController.TrackController
                elif kind_of_controller.lower() == "js" or kind_of_controller.lower() == "css":
                    return  CssJsController.CssJsController() 
                elif kind_of_controller.lower() == "band_img":
-                   return  BandImgController.BandImgController()
+                   return  BandImgController.BandImgController
                else:
-                   return BandController.BandController()
+                   raise Exception
         
         
         
@@ -65,7 +54,6 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         def getRootUrl(self):
           return "/"
-
 
 
         def getTemplate(self,parameters):
@@ -92,14 +80,13 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
         def getresult(self,params,root_url):  
-    	    if str(params) == "None":
-    		      TheView = RootView.RootView()
-    		      return TheView.getAll(None,root_url,None)
+    	    if params == None:
+    		      return RootView.RootView.getAll(None, root_url, None)
     	    else:
     		      TheController = self.getController(params[0])
     		      method = self.getMethod(len(params),params)    
     		      string_template = self.getTemplate(params)
-            return TheController.get(self,method,string_template,root_url)
+            return TheController.get(method,string_template,root_url)
         
         def get_response(self):
             parameters = self.getParams()
@@ -117,7 +104,7 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     self.typeContent = "image/*"        
                 return self.getresult(parameters,self.getRootUrl()) 
             else:   
-                return self.getresult("None",self.getRootUrl()) 
+                return self.getresult(None,self.getRootUrl()) 
         
         
         def do_GET(self):

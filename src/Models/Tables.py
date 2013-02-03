@@ -16,6 +16,15 @@ class BaseModel(Model):
     class Meta:
         database = SqliteDatabase(dirname(realpath(__file__))+'/db/Band.db',check_same_thread=False)
 
+
+class StrField(Field):
+    db_field = 'text'
+    def python_value(self,v):
+        return str(v)
+    
+    def lower(self):
+        return self.python_value(self).lower() 
+
 class Albums(BaseModel):
     description = TextField()
 
@@ -41,16 +50,21 @@ class Style(BaseModel):
 class Tracks(BaseModel):
     description = TextField()
     length = TextField()
-    style = ForeignKeyField(Style)
+    style = ForeignKeyField(Style,related_name='style')
     cost = IntegerField()
-    band = ForeignKeyField(Bands)       
+    band = ForeignKeyField(Bands,related_name='owner')       
 
 class Track_Format(BaseModel):
-    track = ForeignKeyField(Tracks)
-    format = ForeignKeyField(Formats)
+    track = ForeignKeyField(Tracks, related_name='tracks')
+    format = ForeignKeyField(Formats, related_name='format')
     bitrate = IntegerField()
 
 class Tracks_Album(BaseModel):    
-    track = ForeignKeyField(Tracks)
-    album = ForeignKeyField(Albums)   
+    track = ForeignKeyField(Tracks, related_name='tracks')
+    album = ForeignKeyField(Albums, related_name='albums')   
+
+class Bands_Album(BaseModel):    
+    band = ForeignKeyField(Bands, related_name='bands')
+    album = ForeignKeyField(Albums, related_name='albums')   
+        
         
