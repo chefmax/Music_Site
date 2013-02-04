@@ -13,23 +13,18 @@ sys.path.append(dirname(realpath(__file__)))
 from AbstractModel import AbstractModel
 
 class TrackModel(AbstractModel):
+    
     @classmethod  
     def getLetters( cls ):
         query = Tracks.select(fn.Substr(Tracks.description,1,1).alias("fl")).distinct().order_by(Tracks.description)
         table = []
         for iter in query:
             table.append(iter.fl.lower())
-        header = [""]
-        kind = [u"tracks"]
-        hrefs = [0]
-        return cls.addTable(table, header, kind, hrefs)
+        return table
     
     @classmethod
-    def getResult(cls,title,condition):
+    def getResult(cls,condition):
         result = []
-        hrefs = [0,0,-4,-4]
-        kind = [u"tracks",u"bands",None,None]
-        header = [u"Название песни",u"Автор",u"Стиль",u"Длина"]
         if condition == None:
             query = Tracks.select(Tracks.description,Tracks.band,Tracks.style,Tracks.length).distinct().join(Style).switch(Tracks).join(Bands)
         else:
@@ -44,17 +39,13 @@ class TrackModel(AbstractModel):
             buf.append(iter.length)
             table.append(buf)
             buf = []
-        TitleContent = title
-        result.append(cls.addTable(table, header, kind, hrefs))  
+        result.append(table)
         result.append(cls.getLetters())
-        return cls.addTitle(TitleContent, result)
+        return result
 
     @classmethod
     def get( cls, par):
         result = []
-        hrefs = [0,-4]
-        kind = [u"download",None]
-        header = [u"Название песни",u"Стиль"]
         query = Tracks.select(Tracks.id,Tracks.description,Tracks.style)
         table = []
         row = []
@@ -63,13 +54,10 @@ class TrackModel(AbstractModel):
                 row.append(iter.description)
                 row.append(iter.style.description)
         table.append(row)
-        result.append(cls.addTable(table, header, kind, hrefs))
+        result.append(table)
         
         table = []
         rows = []
-        hrefs = [0,-4,-4]
-        header = [u"Формат",u"Битрейт",u"Цена"]
-        kind = [u"download",None,None]
         
         query = Track_Format.select(Track_Format.format,Track_Format.track,Track_Format.bitrate).distinct().join(Formats).switch(Track_Format).join(Tracks).where(fn.Lower(Tracks.description) == par.lower())
         for iter in query:
@@ -82,7 +70,7 @@ class TrackModel(AbstractModel):
             table.append(rows)
             rows = []    
                     
-        result.append(cls.addTable(table, header, kind, hrefs))
+        result.append(table)
         
         divAlbs = cls.divAlbums()
         own = []
@@ -93,27 +81,16 @@ class TrackModel(AbstractModel):
                 own.append([iter.description])
             else:
                 misc.append([iter.description])
-        hrefs = [0]
-        kind = [u"albums"]
-        header = [u"Альбомы"]
-        result.append(cls.addTable(own, header, kind, hrefs))
-        header = [u"Сборники"]
-        result.append(cls.addTable(misc, header, kind, hrefs)) 
-        result.append(cls.getLetters())
-        TitleContent = u"Песня \"%s\":" % (par) 
-        return cls.addTitle(TitleContent, result) 
+        result.append(own)
+        result.append(misc)
+        result.append(cls.getLetters()) 
+        return result
         
     @classmethod
     def getAll( cls, par):
-        return cls.getResult(u"Все песни:",None)
+        return cls.getResult(None)
 
     @classmethod
     def getAllByLetter( cls, par):
-        cls.toFind = par
-        condquery = Tracks.select(Tracks)
-        cond = []
-        for iter in condquery:
-            if str(iter.description).lower().find(par.lower()) == 0:
-                cond.append(iter.id)
-        title = u"Все песни на букву \"%s\":" % (str(par))        
-        return cls.getResult(title , par.lower()) 
+        cls.toFind = par    
+        return cls.getResult( par.lower()) 

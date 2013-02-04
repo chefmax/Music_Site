@@ -25,23 +25,6 @@ class AbstractModel(object):
    
     @classmethod
     def getLetters(cls): pass    
-  
-    @classmethod
-    def addTitle(cls,TitleContent ,result ):
-        if len(result[0]) == 0:
-            TitleContent = "No such"
-        Title = [TitleContent]
-        result.append(Title)
-        return result
-    
-    @classmethod
-    def addTable (cls, table,header, kind , hrefs):
-        result = []
-        result.append(table)
-        result.append(header)
-        result.append(hrefs) 
-        result.append(kind)   
-        return result    
    
     @classmethod
     def divAlbums(cls):

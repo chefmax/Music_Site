@@ -18,18 +18,11 @@ class BandModel(AbstractModel):
         table = []
         for iter in query:
             table.append(iter.fl.lower())
-        header = [""]
-        kind = [u"bands"]
-        hrefs = [0]
-        return cls.addTable(table, header, kind, hrefs)
+        return table
     
     @classmethod    
-    def getResult(cls,title,condition):
-        result = ["0"]
-        hrefs = [0,-4]
-        kind = ["bands",None]
-        header = [u"Название группы",u"Число участников"]
-        TitleContent = u"Группы:"
+    def getResult(cls,condition):
+        result = []
         if condition == None:
             query = Bands.select(Bands.description,Bands.membersnumber)
         else:
@@ -42,20 +35,14 @@ class BandModel(AbstractModel):
             buf.append(iter.membersnumber)
             table.append(buf)
             buf = []
-        TitleContent = title
-        result.append(cls.addTable(table, header, kind, hrefs))  
+        result.append(table)  
         result.append(cls.getLetters())
-        return cls.addTitle(TitleContent, result)
+        return  result
     
     
     
     @classmethod    
-    def get( cls, par):
-        result = ["1"]
-        hrefs = [0,-4,-4] 
-        kind = [u"tracks",None,None]
-        header = [u"Название песни",u"Стиль",u"Длина"]
-        
+    def get( cls, par):   
         query = Tracks.select(Tracks.description,Tracks.length,Tracks.band,Tracks.style).distinct().join(Bands).switch(Tracks).join(Style).where(fn.Lower(Bands.description) == par.lower())
         table = []
         row = []
@@ -65,8 +52,8 @@ class BandModel(AbstractModel):
             row.append(iter.length)
             table.append(row)
             row = []
-                
-        result.append(cls.addTable(table, header, kind, hrefs))
+        result = []        
+        result.append(table)
         
         divAlbs = cls.divAlbums()
         own = []
@@ -77,26 +64,15 @@ class BandModel(AbstractModel):
                 own.append([iter.description])
             else:
                 misc.append([iter.description])
-        hrefs = [0]
-        kind = [u"albums"]
-        header = [u"Альбомы"]
-        result.append(cls.addTable(own, header, kind, hrefs))
-        header = [u"Сборники"]
-        result.append(cls.addTable(misc, header, kind, hrefs)) 
+        result.append(own)
+        result.append(misc) 
         result.append(cls.getLetters())
-        TitleContent = u"Группа \"%s\":" % (par) 
-        return cls.addTitle(TitleContent, result) 
+        return result
     @classmethod
     def getAll(cls, par):
-        return cls.getResult(u"Группы:",None)
+        return cls.getResult(None)
 
     @classmethod
     def getAllByLetter(cls, par):
         cls.toFind = par
-        condquery = Bands.select(Bands.description,Bands.id)
-        cond = []
-        for iter in condquery:
-            if str(iter.description).lower().find(str(par).lower()) == 0:
-                cond.append(iter.id)
-        TitleContent = u"Группы на букву \"%s\":" % (par)
-        return cls.getResult(TitleContent,par.lower())
+        return cls.getResult(par.lower())
