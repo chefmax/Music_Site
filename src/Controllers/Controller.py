@@ -23,4 +23,4 @@ class Controller:
             cls.getView(method).lastTryToFound = cls.Model.toFind
             return cls.getView(method).getAll(request , root_url,par)
         except Exception, e:
-            print e.value
+            print e

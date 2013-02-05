@@ -75,7 +75,9 @@
 
 				</form>	
 			</aside>
-			{{image}}
+			{% if image != None %}
+				{{image}}
+			{% endif %}	
 			
 		</div> <!-- #main -->
 	</div> <!-- #main-container -->	

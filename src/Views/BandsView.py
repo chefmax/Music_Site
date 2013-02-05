@@ -7,23 +7,13 @@ Created on 15.01.2013
 import sys 
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
-from jinja2 import Template
-from jinja2 import FileSystemLoader
-from jinja2.environment import Environment
 from Views.AbstractView import AbstractView
 
 
 class BandsView(AbstractView):
-     
-    @classmethod
-    def getAll(cls, tab , root_url  , stringTemplate):
-        cls.Init()
-        head = u"Все группы:"
-        result = []
-        chars = tab[len(tab)-1]
-        tab.pop()
-        cls.addTable(result, tab[0], [u"Название группы",u"Число участников"], ["bands",None])
-        lettersToInsert = cls.letters.render(root_path = root_url, row = chars, kind = "bands")
-        return cls.layout.render( lettersContent = lettersToInsert,
-                             content = cls.tables.render(tables = result,  root_path = root_url),
-                             title = head,root_path = root_url, kind = "bands" , last = cls.lastTryToFound) 
+    
+    head = u"Все группы"
+    kind = "bands"
+    headers = [[u"Название группы",u"Число участников"]]
+    hrefs = [["bands",None]] 
+
