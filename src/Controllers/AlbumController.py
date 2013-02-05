@@ -5,27 +5,14 @@ Created on 14.01.2013
 '''
 import sys
 from Controllers.Controller import Controller
-from os.path import dirname, realpath, sep, pardir
-sys.path.append(dirname(realpath(__file__)))
-from Models import *
+from os.path import dirname, realpath, sep, pardir, abspath, join
+sys.path.append(abspath(join(dirname(realpath(__file__)), pardir)))
+from Models import AlbumModel
 from Views import OneAlbumView,AlbumsByLetterView,AlbumsView
 
 class AlbumController(Controller):
+    View = {"get":OneAlbumView.OneAlbumView,"getAll":AlbumsView.AlbumsView,
+            "getAllByLetter":AlbumsByLetterView.AlbumsByLetterView}
     
-    @classmethod
-    def getView(cls,method):
-        if method == "get":
-            return OneAlbumView.OneAlbumView
-        elif method == "getAll":
-            return AlbumsView.AlbumsView
-        else:
-            return AlbumsByLetterView.AlbumsByLetterView
-    
-    @classmethod
-    def get( cls,  method, par,root_url):
-        try:
-            request = getattr(AlbumModel.AlbumModel, method)(par)
-            cls.getView(method).lastTryToFound = AlbumModel.AlbumModel.toFind
-            return cls.getView(method).getAll(request , root_url, "")
-        except Exception, e:
-            return "Error! This method doesn't exist!"
+    Model = AlbumModel.AlbumModel
+        
