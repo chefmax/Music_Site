@@ -77,7 +77,7 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                       return "The controller is None!"
                   method = self.methods[len(params)-1]   
                   string_template = self.getTemplate(params)
-            return TheController.get(method,string_template,root_url)
+            return TheController.getRequest(method,string_template,root_url)
 
         
         def get_response(self):
@@ -101,9 +101,7 @@ class MusicSiteHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 self.wfile.write(request)
             else:
                 self.wfile.write(request.encode("utf-8"))    
-                
-                     
-        
+                 
         
         def do_GET(self):
            self.send_response(200)

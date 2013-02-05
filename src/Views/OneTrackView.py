@@ -14,5 +14,5 @@ class OneTrackView(AbstractView):
     head = u"Песня"
     kind = "tracks"
     headers = [[u"Название песни",u"Стиль"],[u"Формат",u"Битрейт",u"Цена"],[u"Альбомы"],[u"Сборники"]]
-    hrefs = [[u"download",None],[u"download",None],[u"albums"],[u"albums"]] 
+    hrefs = [[u"download",None],[u"download",None,None],[u"albums"],[u"albums"]] 
     

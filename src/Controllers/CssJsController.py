@@ -7,13 +7,20 @@ import sys
 from Controllers.Controller import Controller
 from os.path import dirname, realpath, sep, pardir
 sys.path.append(dirname(realpath(__file__)))
-from Models import *
 
 class CssJsController(Controller):
 
     @classmethod
-    def get( cls, method, par,root_url):
-        return getattr(CssJsModel.CssJsModel, "get")(par)
+    def getRequest( cls, method, par,root_url):
+        return cls.get(par)
+    
+    @classmethod    
+    def get( cls, par):
+        source = open(par,"r")
+        result = source.readlines()   
+        source.close()
+        return result
+
 
 
 
